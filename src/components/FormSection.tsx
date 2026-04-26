@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { ChevronDownIcon } from "./Icons";
 
 interface FormSectionProps {

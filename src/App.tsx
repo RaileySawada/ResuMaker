@@ -31,6 +31,7 @@ import {
   SparklesIcon,
   MoonIcon,
   SunIcon,
+  XIcon,
 } from "./components/Icons";
 
 const TEMPLATES: { id: TemplateType; label: string; accent: string }[] = [
