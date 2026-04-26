@@ -107,7 +107,7 @@ export default function App() {
     <div className={`${isDarkMode ? "dark" : ""} h-full`}>
       <div className="flex h-full min-h-full bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-200 overflow-hidden font-sans selection:bg-indigo-500/30 flex-col lg:flex-row relative">
         {/* ── Left Panel: Editor ── */}
-        <aside className={`w-full lg:w-[400px] lg:flex-shrink-0 flex-1 min-h-0 flex flex-col border-r border-zinc-200 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl relative z-20 shadow-2xl print:hidden ${view === "edit" ? "flex" : "hidden lg:flex"}`}>
+        <aside className={`w-full lg:w-[400px] lg:flex-none lg:flex-shrink-0 flex-1 min-h-0 flex flex-col border-r border-zinc-200 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl relative z-20 shadow-2xl print:hidden ${view === "edit" ? "flex" : "hidden lg:flex"}`}>
           {/* Header */}
           <div className="px-6 py-5 border-b border-zinc-200 dark:border-zinc-800/60 bg-gradient-to-b from-zinc-100/50 dark:from-zinc-900/50 to-transparent">
             <div className="flex items-center gap-2.5 mb-1.5">
