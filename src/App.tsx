@@ -53,7 +53,7 @@ const TEMPLATES: { id: TemplateType; label: string; accent: string }[] = [
 
 const A4_WIDTH_PX = 794;
 const A4_HEIGHT_PX = 1123;
-const PREVIEW_MIN_SCALE = 0.5;
+const PREVIEW_MIN_SCALE = 0.2;
 const PREVIEW_MAX_SCALE = 2;
 const PREVIEW_SCALE_STEP = 0.1;
 const PREVIEW_SCALE_STORAGE_KEY = "resumakr_preview_scale";
@@ -72,6 +72,14 @@ type PreviewGesture = {
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, value));
+
+const snapScaleToStep = (value: number) =>
+  Math.round((value + Number.EPSILON) / PREVIEW_SCALE_STEP) *
+  PREVIEW_SCALE_STEP;
+
+const snapScaleDownToStep = (value: number) =>
+  Math.floor((value + Number.EPSILON) / PREVIEW_SCALE_STEP) *
+  PREVIEW_SCALE_STEP;
 
 const distanceBetween = (a: PreviewPoint, b: PreviewPoint) =>
   Math.hypot(a.x - b.x, a.y - b.y);
@@ -95,7 +103,7 @@ const loadStoredPreviewScale = (): number | null => {
 
   const scale = Number(raw);
   return Number.isFinite(scale)
-    ? clamp(scale, PREVIEW_MIN_SCALE, PREVIEW_MAX_SCALE)
+    ? clamp(snapScaleToStep(scale), PREVIEW_MIN_SCALE, PREVIEW_MAX_SCALE)
     : null;
 };
 
@@ -103,7 +111,9 @@ const savePreviewScale = (scale: number) => {
   try {
     localStorage.setItem(
       PREVIEW_SCALE_STORAGE_KEY,
-      String(clamp(scale, PREVIEW_MIN_SCALE, PREVIEW_MAX_SCALE)),
+      String(
+        clamp(snapScaleToStep(scale), PREVIEW_MIN_SCALE, PREVIEW_MAX_SCALE),
+      ),
     );
   } catch {
     // Storage can be unavailable in restricted browser modes.
@@ -290,21 +300,25 @@ export default function App() {
     const updateFitScale = () => {
       if (!canvas.clientWidth || !canvas.clientHeight) return;
 
-      const nextFitScale = Math.min(
+      const rawFitScale = Math.min(
         1,
-        Math.max(
-          PREVIEW_MIN_SCALE,
-          Math.min(
-            canvas.clientWidth / A4_WIDTH_PX,
-            canvas.clientHeight / A4_HEIGHT_PX,
-          ),
+        Math.min(
+          canvas.clientWidth / A4_WIDTH_PX,
+          canvas.clientHeight / A4_HEIGHT_PX,
         ),
+      );
+      const nextFitScale = clamp(
+        snapScaleDownToStep(rawFitScale),
+        PREVIEW_MIN_SCALE,
+        PREVIEW_MAX_SCALE,
       );
 
       const nextVisibleScale = clamp(
+        snapScaleToStep(
         hasInitializedPreviewScaleRef.current
           ? previewScaleRef.current
           : (storedPreviewScaleRef.current ?? nextFitScale),
+        ),
         PREVIEW_MIN_SCALE,
         PREVIEW_MAX_SCALE,
       );
@@ -374,7 +388,7 @@ export default function App() {
     (nextScaleValue: number, anchor: PreviewPoint = { x: 0, y: 0 }) => {
       const currentScale = previewScaleRef.current;
       const nextScale = clamp(
-        nextScaleValue,
+        snapScaleToStep(nextScaleValue),
         PREVIEW_MIN_SCALE,
         PREVIEW_MAX_SCALE,
       );
