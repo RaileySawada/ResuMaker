@@ -1,4 +1,3 @@
-
 import type { ResumeData } from "../../lib/types";
 import {
   formatCalendarDate,
@@ -6,7 +5,14 @@ import {
   parseBullets,
   parseCommaList,
 } from "../../lib/utils";
-import { MailIcon, PhoneIcon, MapPinIcon, LinkedinIcon, GithubIcon, GlobeIcon } from "../Icons";
+import {
+  MailIcon,
+  PhoneIcon,
+  MapPinIcon,
+  LinkedinIcon,
+  GithubIcon,
+  GlobeIcon,
+} from "../Icons";
 
 interface Props {
   data: ResumeData;
@@ -14,11 +20,11 @@ interface Props {
 
 const s = {
   page: {
-    fontFamily: "'Lora', 'Georgia', serif",
+    fontFamily: "var(--resume-font-family)",
     fontSize: "10pt",
     color: "#1a1a1a",
-    lineHeight: "1.5",
-    padding: "36pt 44pt",
+    lineHeight: "1.35",
+    padding: "24pt 28pt",
     background: "#fff",
     display: "flex",
     flexDirection: "column",
@@ -27,125 +33,144 @@ const s = {
     width: "100%",
   } as React.CSSProperties,
   name: {
-    fontSize: "24pt",
+    fontSize: "21pt",
     fontWeight: "700",
-    color: "#111111",
-    letterSpacing: "-0.5px",
+    color: "#111",
+    letterSpacing: "-0.3px",
     marginBottom: "2pt",
   } as React.CSSProperties,
   jobTitle: {
-    fontSize: "11pt",
+    fontSize: "9.5pt",
     color: "#444",
     fontStyle: "italic",
-    marginBottom: "6pt",
+    marginBottom: "5pt",
   } as React.CSSProperties,
-  contactLine: {
-    fontSize: "8.5pt",
-    color: "#555",
-    display: "flex",
-    flexWrap: "wrap" as const,
-    gap: "0 16pt",
-    borderTop: "1.5pt solid #111111",
-    borderBottom: "0.5pt solid #ddd",
-    padding: "5pt 0",
-    marginBottom: "14pt",
-  } as React.CSSProperties,
-  contactItem: {
-    display: "flex",
-    alignItems: "center",
-    gap: "4pt",
-  } as React.CSSProperties,
-  metaTitle: {
-    fontSize: "8pt",
+  topTitle: {
+    fontSize: "7.5pt",
     fontWeight: "700",
     letterSpacing: "1.2px",
     textTransform: "uppercase" as const,
-    color: "#222",
-    marginBottom: "3pt",
+    color: "#333",
+    marginBottom: "2pt",
   } as React.CSSProperties,
-  personalLine: {
-    fontSize: "8.5pt",
+  topRow: {
+    fontSize: "8.25pt",
     color: "#555",
     display: "flex",
     flexWrap: "wrap" as const,
-    gap: "0 16pt",
-    borderTop: "1.5pt solid #111111",
+    gap: "2pt 12pt",
+    borderTop: "1pt solid #111",
     borderBottom: "0.5pt solid #ddd",
-    padding: "5pt 0",
+    padding: "4pt 0",
     marginBottom: "8pt",
   } as React.CSSProperties,
-  sectionTitle: {
+  topItem: {
+    display: "flex",
+    alignItems: "center",
+    gap: "4pt",
+    minWidth: 0,
+  } as React.CSSProperties,
+  summaryText: {
     fontSize: "9pt",
-    fontWeight: "700",
-    color: "#111111",
-    letterSpacing: "2px",
-    textTransform: "uppercase" as const,
-    borderBottom: "1pt solid #111111",
-    paddingBottom: "2pt",
+    color: "#333",
+    lineHeight: "1.45",
+    margin: 0,
+  } as React.CSSProperties,
+  bodyGrid: {
+    display: "grid",
+    gridTemplateColumns: "1.6fr 1fr",
+    gap: "0 14pt",
+    alignItems: "start",
+    minWidth: 0,
+  } as React.CSSProperties,
+  section: {
     marginBottom: "8pt",
-    marginTop: "14pt",
+    minWidth: 0,
+  } as React.CSSProperties,
+  sectionTitle: {
+    fontSize: "8.6pt",
+    fontWeight: "700",
+    color: "#111",
+    letterSpacing: "1.8px",
+    textTransform: "uppercase" as const,
+    borderBottom: "1pt solid #111",
+    paddingBottom: "2pt",
+    marginBottom: "6pt",
+  } as React.CSSProperties,
+  entry: {
+    marginBottom: "6pt",
+    minWidth: 0,
   } as React.CSSProperties,
   entryHeader: {
     display: "flex",
-    justifyContent: "space-between",
     alignItems: "baseline",
     gap: "8pt",
+    minWidth: 0,
   } as React.CSSProperties,
   entryTitle: {
     fontWeight: "700",
-    fontSize: "10.5pt",
+    fontSize: "9.5pt",
     color: "#111",
+    flex: 1,
+    minWidth: 0,
   } as React.CSSProperties,
   entryDate: {
-    fontSize: "8.5pt",
+    fontSize: "7.8pt",
     color: "#666",
     whiteSpace: "nowrap" as const,
     flexShrink: 0,
   } as React.CSSProperties,
   entrySub: {
-    fontSize: "9.5pt",
-    color: "#444",
+    fontSize: "8.5pt",
+    color: "#555",
     fontStyle: "italic",
-    marginBottom: "3pt",
+    marginBottom: "2pt",
+    minWidth: 0,
   } as React.CSSProperties,
   bullet: {
     display: "flex",
-    gap: "6pt",
-    fontSize: "9.5pt",
+    gap: "5pt",
+    fontSize: "8.7pt",
     color: "#222",
-    marginTop: "2pt",
+    marginTop: "1pt",
+    minWidth: 0,
   } as React.CSSProperties,
-  bulletDot: {
+  bulletMark: {
     flexShrink: 0,
-    marginTop: "0.5pt",
     color: "#666",
-    fontStyle: "normal",
   } as React.CSSProperties,
-  tag: {
-    display: "inline-block",
-    background: "#f3f4f6",
-    color: "#374151",
-    borderRadius: "3pt",
-    padding: "1pt 5pt",
-    fontSize: "8pt",
-    marginRight: "4pt",
+  simpleRow: {
+    display: "flex",
+    alignItems: "baseline",
+    gap: "8pt",
+    justifyContent: "space-between",
     marginBottom: "3pt",
+    minWidth: 0,
+  } as React.CSSProperties,
+  simpleLeft: {
+    fontSize: "8.7pt",
+    color: "#222",
+    flex: 1,
+    minWidth: 0,
   } as React.CSSProperties,
   skillRow: {
-    display: "flex",
-    gap: "4pt",
     marginBottom: "4pt",
-    alignItems: "baseline",
-    flexWrap: "wrap" as const,
+    fontSize: "8.7pt",
+    color: "#333",
+    minWidth: 0,
   } as React.CSSProperties,
   skillLabel: {
-    fontSize: "9.5pt",
     fontWeight: "700",
-    color: "#222",
-    minWidth: "90pt",
-    flexShrink: 0,
+    color: "#111",
   } as React.CSSProperties,
 };
+
+const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div style={s.section}>
+    <div style={s.sectionTitle}>{title}</div>
+    {children}
+  </div>
+);
 
 export default function ClassicTemplate({ data }: Props) {
   const {
@@ -160,297 +185,255 @@ export default function ClassicTemplate({ data }: Props) {
     awards,
     volunteer,
   } = data;
+
   const hasPersonalInfo = Boolean(
     p.birthDate || p.sex || p.civilStatus || p.nationality,
   );
 
   return (
     <div style={s.page}>
-      {/* Header */}
-      <div style={{ marginBottom: "2pt" }}>
+      <div style={{ marginBottom: "3pt" }}>
         {p.fullName && <div style={s.name}>{p.fullName}</div>}
         {p.jobTitle && <div style={s.jobTitle}>{p.jobTitle}</div>}
       </div>
 
-      {/* Personal Information */}
       {hasPersonalInfo && (
         <>
-          <div style={s.metaTitle}>Personal Information</div>
-          <div style={s.personalLine}>
-            {p.birthDate && <span style={s.contactItem}>Birth Date: {formatCalendarDate(p.birthDate)}</span>}
-            {p.sex && <span style={s.contactItem}>Sex: {p.sex}</span>}
-            {p.civilStatus && <span style={s.contactItem}>Civil Status: {p.civilStatus}</span>}
-            {p.nationality && <span style={s.contactItem}>Nationality: {p.nationality}</span>}
+          <div style={s.topTitle}>Personal Information</div>
+          <div style={s.topRow}>
+            {p.birthDate && (
+              <span style={s.topItem}>Birth Date: {formatCalendarDate(p.birthDate)}</span>
+            )}
+            {p.sex && <span style={s.topItem}>Sex: {p.sex}</span>}
+            {p.civilStatus && (
+              <span style={s.topItem}>Civil Status: {p.civilStatus}</span>
+            )}
+            {p.nationality && (
+              <span style={s.topItem}>Nationality: {p.nationality}</span>
+            )}
           </div>
         </>
       )}
 
-      {/* Contact */}
       {(p.email || p.phone || p.location || p.linkedin || p.github || p.website) && (
         <>
-          <div style={s.metaTitle}>Contact</div>
+          <div style={s.topTitle}>Contact</div>
           <div
             style={{
-              ...s.contactLine,
-              borderTop: hasPersonalInfo ? "0.5pt solid #ddd" : "1.5pt solid #111111",
+              ...s.topRow,
+              borderTop: hasPersonalInfo ? "0.5pt solid #ddd" : "1pt solid #111",
+              marginBottom: "10pt",
             }}
           >
-            {p.email && <span style={s.contactItem}><MailIcon size={12} /> {p.email}</span>}
-            {p.phone && <span style={s.contactItem}><PhoneIcon size={12} /> {p.phone}</span>}
-            {p.location && <span style={s.contactItem}><MapPinIcon size={12} /> {p.location}</span>}
+            {p.email && (
+              <span style={s.topItem}>
+                <MailIcon size={11} /> {p.email}
+              </span>
+            )}
+            {p.phone && (
+              <span style={s.topItem}>
+                <PhoneIcon size={11} /> {p.phone}
+              </span>
+            )}
+            {p.location && (
+              <span style={s.topItem}>
+                <MapPinIcon size={11} /> {p.location}
+              </span>
+            )}
             {p.linkedin && (
-              <span style={s.contactItem}>
-                <LinkedinIcon size={12} /> {p.linkedin.replace(/^https?:\/\/(www\.)?/, "")}
+              <span style={s.topItem}>
+                <LinkedinIcon size={11} /> {p.linkedin.replace(/^https?:\/\/(www\.)?/, "")}
               </span>
             )}
             {p.github && (
-              <span style={s.contactItem}>
-                <GithubIcon size={12} /> {p.github.replace(/^https?:\/\/(www\.)?/, "")}
+              <span style={s.topItem}>
+                <GithubIcon size={11} /> {p.github.replace(/^https?:\/\/(www\.)?/, "")}
               </span>
             )}
             {p.website && (
-              <span style={s.contactItem}>
-                <GlobeIcon size={12} /> {p.website.replace(/^https?:\/\//, "")}
+              <span style={s.topItem}>
+                <GlobeIcon size={11} /> {p.website.replace(/^https?:\/\//, "")}
               </span>
             )}
           </div>
         </>
       )}
 
-      {/* Summary */}
       {summary && (
-        <>
-          <div style={s.sectionTitle}>Objectives</div>
-          <p style={{ fontSize: "9.5pt", color: "#333", lineHeight: "1.6" }}>
-            {summary}
-          </p>
-        </>
+        <Section title="Objectives">
+          <p style={s.summaryText}>{summary}</p>
+        </Section>
       )}
 
-      {/* Experience */}
-      {experience.length > 0 && (
-        <>
-          <div style={s.sectionTitle}>Work Experience</div>
-          {experience.map((exp) => (
-            <div key={exp.id} style={{ marginBottom: "10pt" }}>
-              <div style={s.entryHeader}>
-                <span style={s.entryTitle}>{exp.position}</span>
-                <span style={s.entryDate}>
-                  {formatDateRange(exp.startDate, exp.endDate, exp.isCurrent)}
-                </span>
-              </div>
-              <div style={s.entrySub}>
-                {exp.company}
-                {exp.location ? ` · ${exp.location}` : ""}
-              </div>
-              {parseBullets(exp.description).map((b, i) => (
-                <div key={i} style={s.bullet}>
-                  <span style={s.bulletDot}>▸</span>
-                  <span>{b}</span>
+      <div style={s.bodyGrid}>
+        <div style={{ minWidth: 0 }}>
+          {experience.length > 0 && (
+            <Section title="Work Experience">
+              {experience.map((exp) => (
+                <div key={exp.id} style={s.entry}>
+                  <div style={s.entryHeader}>
+                    <div style={s.entryTitle}>{exp.position}</div>
+                    <div style={s.entryDate}>
+                      {formatDateRange(exp.startDate, exp.endDate, exp.isCurrent)}
+                    </div>
+                  </div>
+                  <div style={s.entrySub}>
+                    {exp.company}
+                    {exp.location ? ` - ${exp.location}` : ""}
+                  </div>
+                  {parseBullets(exp.description).map((b, i) => (
+                    <div key={i} style={s.bullet}>
+                      <span style={s.bulletMark}>-</span>
+                      <span>{b}</span>
+                    </div>
+                  ))}
                 </div>
               ))}
-            </div>
-          ))}
-        </>
-      )}
+            </Section>
+          )}
 
-      {/* Education */}
-      {education.length > 0 && (
-        <>
-          <div style={s.sectionTitle}>Education</div>
-          {education.map((edu) => (
-            <div key={edu.id} style={{ marginBottom: "8pt" }}>
-              <div style={s.entryHeader}>
-                <span style={s.entryTitle}>{edu.institution}</span>
-                <span style={s.entryDate}>
-                  {formatDateRange(edu.startDate, edu.endDate, edu.isCurrent)}
-                </span>
-              </div>
-              <div style={s.entrySub}>
-                {[edu.degree, edu.fieldOfStudy].filter(Boolean).join(" in ")}
-                {edu.location ? ` · ${edu.location}` : ""}
-                {edu.gpa ? ` · GPA: ${edu.gpa}` : ""}
-              </div>
-              {parseBullets(edu.achievements).map((a, i) => (
-                <div key={i} style={s.bullet}>
-                  <span style={s.bulletDot}>▸</span>
-                  <span>{a}</span>
+          {education.length > 0 && (
+            <Section title="Education">
+              {education.map((edu) => (
+                <div key={edu.id} style={s.entry}>
+                  <div style={s.entryHeader}>
+                    <div style={s.entryTitle}>{edu.institution}</div>
+                    <div style={s.entryDate}>
+                      {formatDateRange(edu.startDate, edu.endDate, edu.isCurrent)}
+                    </div>
+                  </div>
+                  <div style={s.entrySub}>
+                    {[edu.degree, edu.fieldOfStudy].filter(Boolean).join(" in ")}
+                    {edu.location ? ` - ${edu.location}` : ""}
+                    {edu.gpa ? ` - GPA: ${edu.gpa}` : ""}
+                  </div>
+                  {parseBullets(edu.achievements).map((a, i) => (
+                    <div key={i} style={s.bullet}>
+                      <span style={s.bulletMark}>-</span>
+                      <span>{a}</span>
+                    </div>
+                  ))}
                 </div>
               ))}
-            </div>
-          ))}
-        </>
-      )}
+            </Section>
+          )}
 
-      {/* Skills */}
-      {skills.filter((sg) => sg.items).length > 0 && (
-        <>
-          <div style={s.sectionTitle}>Skills</div>
-          {skills
-            .filter((sg) => sg.items)
-            .map((sg) => (
-              <div key={sg.id} style={s.skillRow}>
-                {sg.category && (
-                  <span style={s.skillLabel}>{sg.category}:</span>
-                )}
-                <span style={{ fontSize: "9.5pt", color: "#333" }}>
-                  {parseCommaList(sg.items).join(" · ")}
-                </span>
-              </div>
-            ))}
-        </>
-      )}
-
-      {/* Projects */}
-      {projects.length > 0 && (
-        <>
-          <div style={s.sectionTitle}>Projects</div>
-          {projects.map((proj) => (
-            <div key={proj.id} style={{ marginBottom: "8pt" }}>
-              <div style={s.entryHeader}>
-                <span
-                  style={{
-                    ...s.entryTitle,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6pt",
-                  }}
-                >
-                  {proj.name}
+          {projects.length > 0 && (
+            <Section title="Projects">
+              {projects.map((proj) => (
+                <div key={proj.id} style={s.entry}>
+                  <div style={s.entryHeader}>
+                    <div style={s.entryTitle}>{proj.name}</div>
+                    {(proj.startDate || proj.endDate) && (
+                      <div style={s.entryDate}>
+                        {formatDateRange(proj.startDate, proj.endDate, false)}
+                      </div>
+                    )}
+                  </div>
                   {(proj.liveUrl || proj.repoUrl) && (
-                    <span
-                      style={{
-                        fontSize: "8pt",
-                        color: "#555",
-                        fontWeight: "normal",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      {proj.liveUrl
-                        ? proj.liveUrl.replace(/^https?:\/\//, "")
-                        : proj.repoUrl.replace(/^https?:\/\//, "")}
-                    </span>
+                    <div style={s.entrySub}>
+                      {(proj.liveUrl || proj.repoUrl).replace(/^https?:\/\//, "")}
+                    </div>
                   )}
-                </span>
-                {(proj.startDate || proj.endDate) && (
-                  <span style={s.entryDate}>
-                    {formatDateRange(proj.startDate, proj.endDate, false)}
+                  {proj.technologies && (
+                    <div style={s.entrySub}>Tech: {proj.technologies}</div>
+                  )}
+                  {parseBullets(proj.description).map((b, i) => (
+                    <div key={i} style={s.bullet}>
+                      <span style={s.bulletMark}>-</span>
+                      <span>{b}</span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </Section>
+          )}
+        </div>
+
+        <div style={{ minWidth: 0 }}>
+          {skills.filter((sg) => sg.items).length > 0 && (
+            <Section title="Skills">
+              {skills
+                .filter((sg) => sg.items)
+                .map((sg) => (
+                  <div key={sg.id} style={s.skillRow}>
+                    {sg.category && (
+                      <span style={s.skillLabel}>{sg.category}: </span>
+                    )}
+                    {parseCommaList(sg.items).join(", ")}
+                  </div>
+                ))}
+            </Section>
+          )}
+
+          {certifications.length > 0 && (
+            <Section title="Certifications">
+              {certifications.map((c) => (
+                <div key={c.id} style={s.simpleRow}>
+                  <span style={s.simpleLeft}>
+                    <strong>{c.name}</strong>
+                    {c.issuer ? ` - ${c.issuer}` : ""}
                   </span>
-                )}
-              </div>
-              {proj.technologies && (
-                <div style={{ ...s.entrySub, marginBottom: "3pt" }}>
-                  Tech: {proj.technologies}
-                </div>
-              )}
-              {parseBullets(proj.description).map((b, i) => (
-                <div key={i} style={s.bullet}>
-                  <span style={s.bulletDot}>▸</span>
-                  <span>{b}</span>
+                  <span style={s.entryDate}>
+                    {c.issueDate ? c.issueDate.slice(0, 7).replace("-", "/") : ""}
+                  </span>
                 </div>
               ))}
-            </div>
-          ))}
-        </>
-      )}
+            </Section>
+          )}
 
-      {/* Certifications */}
-      {certifications.length > 0 && (
-        <>
-          <div style={s.sectionTitle}>Certifications</div>
-          {certifications.map((c) => (
-            <div
-              key={c.id}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "4pt",
-              }}
-            >
-              <span style={{ fontSize: "9.5pt", color: "#111" }}>
-                <strong>{c.name}</strong> · {c.issuer}
-              </span>
-              <span style={s.entryDate}>
-                {c.issueDate ? c.issueDate.slice(0, 7).replace("-", "/") : ""}
-                {c.expiryDate
-                  ? ` – ${c.expiryDate.slice(0, 7).replace("-", "/")}`
-                  : ""}
-              </span>
-            </div>
-          ))}
-        </>
-      )}
-
-      {/* Languages */}
-      {languages.length > 0 && (
-        <>
-          <div style={s.sectionTitle}>Languages</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "4pt 20pt" }}>
-            {languages.map((l) => (
-              <span key={l.id} style={{ fontSize: "9.5pt", color: "#222" }}>
-                <strong>{l.name}</strong>
-                {l.proficiency && (
-                  <span style={{ color: "#666" }}> ({l.proficiency})</span>
-                )}
-              </span>
-            ))}
-          </div>
-        </>
-      )}
-
-      {/* Awards */}
-      {awards.length > 0 && (
-        <>
-          <div style={s.sectionTitle}>Awards & Achievements</div>
-          {awards.map((a) => (
-            <div
-              key={a.id}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "3pt",
-              }}
-            >
-              <span style={{ fontSize: "9.5pt" }}>
-                <strong>{a.title}</strong>
-                {a.issuer ? ` · ${a.issuer}` : ""}
-                {a.description && (
-                  <span style={{ color: "#555" }}> — {a.description}</span>
-                )}
-              </span>
-              {a.date && (
-                <span style={s.entryDate}>
-                  {a.date.slice(0, 7).replace("-", "/")}
-                </span>
-              )}
-            </div>
-          ))}
-        </>
-      )}
-
-      {/* Volunteer */}
-      {volunteer.length > 0 && (
-        <>
-          <div style={s.sectionTitle}>Volunteer Work</div>
-          {volunteer.map((v) => (
-            <div key={v.id} style={{ marginBottom: "8pt" }}>
-              <div style={s.entryHeader}>
-                <span style={s.entryTitle}>{v.role}</span>
-                <span style={s.entryDate}>
-                  {formatDateRange(v.startDate, v.endDate, v.isCurrent)}
-                </span>
-              </div>
-              <div style={s.entrySub}>{v.organization}</div>
-              {parseBullets(v.description).map((b, i) => (
-                <div key={i} style={s.bullet}>
-                  <span style={s.bulletDot}>▸</span>
-                  <span>{b}</span>
+          {languages.length > 0 && (
+            <Section title="Languages">
+              {languages.map((l) => (
+                <div key={l.id} style={s.simpleRow}>
+                  <span style={s.simpleLeft}>
+                    <strong>{l.name}</strong>
+                  </span>
+                  <span style={s.entryDate}>{l.proficiency}</span>
                 </div>
               ))}
-            </div>
-          ))}
-        </>
-      )}
+            </Section>
+          )}
+
+          {awards.length > 0 && (
+            <Section title="Awards & Achievements">
+              {awards.map((a) => (
+                <div key={a.id} style={s.entry}>
+                  <div style={s.simpleLeft}>
+                    <strong>{a.title}</strong>
+                    {a.issuer ? ` - ${a.issuer}` : ""}
+                  </div>
+                  {a.description && (
+                    <div style={{ ...s.entrySub, marginTop: "1pt" }}>{a.description}</div>
+                  )}
+                </div>
+              ))}
+            </Section>
+          )}
+
+          {volunteer.length > 0 && (
+            <Section title="Volunteer Work">
+              {volunteer.map((v) => (
+                <div key={v.id} style={s.entry}>
+                  <div style={s.entryHeader}>
+                    <div style={s.entryTitle}>{v.role}</div>
+                    <div style={s.entryDate}>
+                      {formatDateRange(v.startDate, v.endDate, v.isCurrent)}
+                    </div>
+                  </div>
+                  <div style={s.entrySub}>{v.organization}</div>
+                  {parseBullets(v.description).map((b, i) => (
+                    <div key={i} style={s.bullet}>
+                      <span style={s.bulletMark}>-</span>
+                      <span>{b}</span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </Section>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

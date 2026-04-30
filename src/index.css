@@ -23,6 +23,7 @@ body,
 :root {
   --resume-a4-width: 793.7008px;
   --resume-a4-height: 1122.5197px;
+  --resume-font-family: "Calibri", "Carlito", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
 .brand-logo {

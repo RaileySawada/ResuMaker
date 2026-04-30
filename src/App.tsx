@@ -124,6 +124,8 @@ const savePreviewScale = (scale: number) => {
 export default function App() {
   const resume = useResume();
   const { data } = resume;
+  const useStandardTextSizing =
+    data.template === "classic" || data.template === "minimal";
 
   const [openSection, setOpenSection] = useState<string | null>("personal");
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -236,6 +238,11 @@ export default function App() {
   }, [previewPan]);
 
   const updateResumeContentScale = useCallback(() => {
+    if (useStandardTextSizing) {
+      setResumeContentScale(1);
+      return;
+    }
+
     const paper = resumePaperRef.current;
     const content = resumeContentRef.current;
     if (!paper || !content) return;
@@ -244,16 +251,18 @@ export default function App() {
     const contentHeight = content.scrollHeight;
     if (!pageHeight || !contentHeight) return;
 
-    const nextScale = clamp(
-      Math.min(1, pageHeight / contentHeight),
-      RESUME_CONTENT_MIN_SCALE,
-      1,
-    );
+    const nextScale = Math.round(
+      clamp(
+        Math.min(1, pageHeight / contentHeight),
+        RESUME_CONTENT_MIN_SCALE,
+        1,
+      ) * 1000,
+    ) / 1000;
 
     setResumeContentScale((current) =>
-      Math.abs(current - nextScale) > 0.001 ? nextScale : current,
+      Math.abs(current - nextScale) > 0.003 ? nextScale : current,
     );
-  }, []);
+  }, [useStandardTextSizing]);
 
   const handleReset = () => {
     setShowResetConfirm(true);
@@ -287,10 +296,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const paper = resumePaperRef.current;
-    const content = resumeContentRef.current;
-    if (!paper || !content) return;
-
     let rafId: number | null = null;
     const scheduleFitCheck = () => {
       if (rafId !== null) {
@@ -304,28 +309,26 @@ export default function App() {
     };
 
     scheduleFitCheck();
-    const observer = new ResizeObserver(scheduleFitCheck);
-    observer.observe(paper);
-    observer.observe(content);
     window.addEventListener("resize", scheduleFitCheck);
 
-    const fonts = document.fonts;
+    const fonts = "fonts" in document ? document.fonts : null;
     let isCancelled = false;
-    fonts.ready.then(() => {
-      if (!isCancelled) {
-        scheduleFitCheck();
-      }
-    });
+    if (fonts) {
+      fonts.ready.then(() => {
+        if (!isCancelled) {
+          scheduleFitCheck();
+        }
+      });
+    }
 
     return () => {
       isCancelled = true;
       if (rafId !== null) {
         window.cancelAnimationFrame(rafId);
       }
-      observer.disconnect();
       window.removeEventListener("resize", scheduleFitCheck);
     };
-  }, [updateResumeContentScale, view, isPreviewFullscreen, data.template]);
+  }, [updateResumeContentScale, view, isPreviewFullscreen, data]);
 
   const clampPanToViewport = useCallback(
     (
@@ -924,7 +927,7 @@ export default function App() {
             <div className="resume-canvas" ref={previewCanvasRef}>
               <div
                 id="resume-preview"
-                className="resume-paper"
+                className={`resume-paper resume-template-${data.template}`}
                 ref={resumePaperRef}
                 style={{
                   transform: `translate(-50%, -50%) translate(${previewPan.x}px, ${previewPan.y}px) scale(${previewScale})`,
@@ -934,7 +937,9 @@ export default function App() {
                   className="resume-fit-scale-layer"
                   style={{
                     transform: `scale(${resumeContentScale})`,
-                    width: `${100 / resumeContentScale}%`,
+                    width: useStandardTextSizing
+                      ? "100%"
+                      : `${100 / resumeContentScale}%`,
                   }}
                 >
                   <div className="resume-fit-content" ref={resumeContentRef}>

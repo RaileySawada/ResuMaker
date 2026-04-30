@@ -101,7 +101,7 @@ export default function ModernTemplate({ data }: Props) {
   return (
     <div
       style={{
-        fontFamily: "'DM Sans', 'Helvetica Neue', Arial, sans-serif",
+        fontFamily: "var(--resume-font-family)",
         display: "flex",
         flex: 1,
         minHeight: "var(--resume-a4-height)",

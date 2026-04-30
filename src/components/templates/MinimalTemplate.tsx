@@ -33,16 +33,16 @@ export default function MinimalTemplate({ data }: Props) {
     title: string;
     children: React.ReactNode;
   }) => (
-    <div style={{ marginBottom: "18pt" }}>
+    <div style={{ marginBottom: "12pt" }}>
       <div
         style={{
-          fontSize: "7pt",
+          fontSize: "7.6pt",
           fontWeight: "700",
-          letterSpacing: "3px",
+          letterSpacing: "2px",
           textTransform: "uppercase" as const,
           color: "#aaa",
-          marginBottom: "8pt",
-          paddingBottom: "4pt",
+          marginBottom: "5pt",
+          paddingBottom: "3pt",
           borderBottom: "0.5pt solid #e5e5e5",
         }}
       >
@@ -63,24 +63,34 @@ export default function MinimalTemplate({ data }: Props) {
     subtitle?: string;
     bullets?: string[];
   }) => (
-    <div style={{ marginBottom: "8pt" }}>
+    <div style={{ marginBottom: "5pt" }}>
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "baseline",
+          gap: "8pt",
+          minWidth: 0,
         }}
       >
-        <span style={{ fontWeight: "600", fontSize: "9.5pt", color: "#111" }}>
+        <span
+          style={{
+            fontWeight: "600",
+            fontSize: "10pt",
+            color: "#111",
+            flex: 1,
+            minWidth: 0,
+          }}
+        >
           {left}
         </span>
         {right && (
           <span
             style={{
-              fontSize: "7.5pt",
+              fontSize: "9pt",
               color: "#999",
               whiteSpace: "nowrap" as const,
-              marginLeft: "8pt",
+              flexShrink: 0,
             }}
           >
             {right}
@@ -90,7 +100,7 @@ export default function MinimalTemplate({ data }: Props) {
       {subtitle && (
         <div
           style={{
-            fontSize: "8.5pt",
+            fontSize: "9pt",
             color: "#666",
             marginTop: "1pt",
             marginBottom: "2pt",
@@ -105,10 +115,10 @@ export default function MinimalTemplate({ data }: Props) {
           style={{
             display: "flex",
             gap: "8pt",
-            fontSize: "8.5pt",
+            fontSize: "9pt",
             color: "#444",
             marginTop: "2pt",
-            lineHeight: "1.5",
+            lineHeight: "1.4",
           }}
         >
           <span style={{ flexShrink: 0, color: "#ccc" }}>—</span>
@@ -121,11 +131,11 @@ export default function MinimalTemplate({ data }: Props) {
   return (
     <div
       style={{
-        fontFamily: "'Inter', 'Helvetica Neue', Arial, sans-serif",
-        fontSize: "9.5pt",
+        fontFamily: "var(--resume-font-family)",
+        fontSize: "10pt",
         color: "#222",
-        lineHeight: "1.5",
-        padding: "40pt 48pt",
+        lineHeight: "1.35",
+        padding: "26pt 30pt",
         background: "#fff",
         display: "flex",
         flexDirection: "column",
@@ -137,39 +147,39 @@ export default function MinimalTemplate({ data }: Props) {
       {/* Header */}
       <div
         style={{
-          marginBottom: "18pt",
+          marginBottom: "12pt",
           borderBottom: "1.5pt solid #111",
-          paddingBottom: "12pt",
+          paddingBottom: "8pt",
         }}
       >
         {p.fullName && (
           <div
             style={{
-              fontSize: "22pt",
+              fontSize: "20pt",
               fontWeight: "300",
               color: "#111",
               letterSpacing: "-0.5px",
-              marginBottom: "3pt",
+              marginBottom: "2pt",
             }}
           >
             {p.fullName}
           </div>
         )}
         {p.jobTitle && (
-          <div style={{ fontSize: "9pt", color: "#777", marginBottom: "8pt" }}>
+          <div style={{ fontSize: "9pt", color: "#777", marginBottom: "5pt" }}>
             {p.jobTitle}
           </div>
         )}
         {(p.birthDate || p.sex || p.civilStatus || p.nationality) && (
-          <div style={{ marginBottom: "7pt" }}>
+          <div style={{ marginBottom: "5pt" }}>
             <div
               style={{
-                fontSize: "7pt",
+                fontSize: "7.6pt",
                 fontWeight: "700",
                 letterSpacing: "1.5px",
                 textTransform: "uppercase" as const,
                 color: "#777",
-                marginBottom: "3pt",
+                marginBottom: "2pt",
               }}
             >
               Personal Information
@@ -178,8 +188,8 @@ export default function MinimalTemplate({ data }: Props) {
               style={{
                 display: "flex",
                 flexWrap: "wrap" as const,
-                gap: "0 16pt",
-                fontSize: "7.5pt",
+                gap: "0 12pt",
+                fontSize: "9pt",
                 color: "#888",
               }}
             >
@@ -194,12 +204,12 @@ export default function MinimalTemplate({ data }: Props) {
           <div>
             <div
               style={{
-                fontSize: "7pt",
+                fontSize: "7.6pt",
                 fontWeight: "700",
                 letterSpacing: "1.5px",
                 textTransform: "uppercase" as const,
                 color: "#777",
-                marginBottom: "3pt",
+                marginBottom: "2pt",
               }}
             >
               Contact
@@ -208,8 +218,8 @@ export default function MinimalTemplate({ data }: Props) {
               style={{
                 display: "flex",
                 flexWrap: "wrap" as const,
-                gap: "0 16pt",
-                fontSize: "7.5pt",
+                gap: "0 12pt",
+                fontSize: "9pt",
                 color: "#888",
               }}
             >
@@ -234,7 +244,7 @@ export default function MinimalTemplate({ data }: Props) {
             style={{
               fontSize: "9pt",
               color: "#555",
-              lineHeight: "1.7",
+              lineHeight: "1.5",
               margin: 0,
             }}
           >
@@ -288,7 +298,7 @@ export default function MinimalTemplate({ data }: Props) {
             {skills
               .filter((sg) => sg.items)
               .map((sg) => (
-                <div key={sg.id} style={{ fontSize: "8.5pt", color: "#333" }}>
+                <div key={sg.id} style={{ fontSize: "9pt", color: "#333" }}>
                   {sg.category && (
                     <span style={{ fontWeight: "600", color: "#111" }}>
                       {sg.category}:{" "}
@@ -304,7 +314,7 @@ export default function MinimalTemplate({ data }: Props) {
       {projects.length > 0 && (
         <Section title="Projects">
           {projects.map((proj) => (
-            <div key={proj.id} style={{ marginBottom: "7pt" }}>
+            <div key={proj.id} style={{ marginBottom: "5pt" }}>
               <div
                 style={{
                   display: "flex",
@@ -315,7 +325,7 @@ export default function MinimalTemplate({ data }: Props) {
                 <span
                   style={{
                     fontWeight: "600",
-                    fontSize: "9.5pt",
+                    fontSize: "10pt",
                     color: "#111",
                   }}
                 >
@@ -324,7 +334,7 @@ export default function MinimalTemplate({ data }: Props) {
                     <span
                       style={{
                         fontWeight: "400",
-                        fontSize: "7.5pt",
+                        fontSize: "9pt",
                         color: "#999",
                         marginLeft: "6pt",
                       }}
@@ -339,7 +349,7 @@ export default function MinimalTemplate({ data }: Props) {
                 {(proj.startDate || proj.endDate) && (
                   <span
                     style={{
-                      fontSize: "7.5pt",
+                      fontSize: "9pt",
                       color: "#999",
                       flexShrink: 0,
                       marginLeft: "8pt",
@@ -352,7 +362,7 @@ export default function MinimalTemplate({ data }: Props) {
               {proj.technologies && (
                 <div
                   style={{
-                    fontSize: "8pt",
+                    fontSize: "9pt",
                     color: "#888",
                     marginTop: "1pt",
                     marginBottom: "2pt",
@@ -367,7 +377,7 @@ export default function MinimalTemplate({ data }: Props) {
                   style={{
                     display: "flex",
                     gap: "8pt",
-                    fontSize: "8.5pt",
+                    fontSize: "9pt",
                     color: "#444",
                     marginTop: "2pt",
                   }}
@@ -389,14 +399,16 @@ export default function MinimalTemplate({ data }: Props) {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                marginBottom: "3pt",
-                fontSize: "8.5pt",
+                gap: "8pt",
+                marginBottom: "2pt",
+                fontSize: "9pt",
+                minWidth: 0,
               }}
             >
-              <span>
+              <span style={{ flex: 1, minWidth: 0 }}>
                 <span style={{ fontWeight: "600" }}>{c.name}</span> · {c.issuer}
               </span>
-              <span style={{ color: "#999" }}>
+              <span style={{ color: "#999", flexShrink: 0 }}>
                 {c.issueDate?.slice(0, 7).replace("-", "/")}
               </span>
             </div>
@@ -409,7 +421,7 @@ export default function MinimalTemplate({ data }: Props) {
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
-            gap: "0 24pt",
+            gap: "0 16pt",
           }}
         >
           {languages.length > 0 && (
@@ -420,7 +432,7 @@ export default function MinimalTemplate({ data }: Props) {
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
-                    fontSize: "8.5pt",
+                    fontSize: "9pt",
                     marginBottom: "2pt",
                   }}
                 >
@@ -437,7 +449,7 @@ export default function MinimalTemplate({ data }: Props) {
               {awards.map((a) => (
                 <div
                   key={a.id}
-                  style={{ fontSize: "8.5pt", marginBottom: "3pt" }}
+                  style={{ fontSize: "9pt", marginBottom: "2pt" }}
                 >
                   <span style={{ fontWeight: "600" }}>{a.title}</span>
                   {a.issuer && (
@@ -466,3 +478,4 @@ export default function MinimalTemplate({ data }: Props) {
     </div>
   );
 }
+
