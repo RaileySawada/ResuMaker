@@ -938,7 +938,11 @@ export default function App() {
                 type="button"
                 onClick={closeToast}
                 aria-label="Dismiss notification"
-                className="flex h-8 w-8 flex-none items-center justify-center rounded-xl bg-white/15 text-white transition hover:bg-white/25 active:scale-95"
+                className={`flex h-8 w-8 flex-none items-center justify-center rounded-xl transition active:scale-95 ${
+                  toast.type === "success"
+                    ? "bg-white/15 text-white hover:bg-white/25 dark:bg-zinc-900/10 dark:text-zinc-950 dark:hover:bg-zinc-900/20"
+                    : "bg-white/15 text-white hover:bg-white/25"
+                }`}
               >
                 <XIcon size={15} />
               </button>

@@ -108,7 +108,7 @@ export default function ExtrasForm(props: Props) {
                   props.onUpdateLanguage(l.id, { name: e.target.value })
                 }
                 placeholder="e.g. Spanish"
-                className="flex-1 bg-transparent px-2 py-1 text-[13px] font-bold text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none"
+                className="min-w-0 flex-1 bg-transparent px-2 py-1 text-[13px] font-bold text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none"
               />
               <select
                 value={l.proficiency}
@@ -117,7 +117,7 @@ export default function ExtrasForm(props: Props) {
                     proficiency: e.target.value as LanguageProficiency,
                   })
                 }
-                className="bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/50 text-[12px] font-medium text-zinc-700 dark:text-zinc-200 rounded-lg px-2 py-1.5 focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-500 cursor-pointer"
+                className="shrink-0 bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/50 text-[12px] font-medium text-zinc-700 dark:text-zinc-200 rounded-lg px-2 py-1.5 focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-500 cursor-pointer"
               >
                 {PROFICIENCY_LEVELS.map((p) => (
                   <option key={p} value={p} className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200">
@@ -127,7 +127,7 @@ export default function ExtrasForm(props: Props) {
               </select>
               <button
                 onClick={() => props.onRemoveLanguage(l.id)}
-                className="text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-md"
+                className="shrink-0 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-md"
               >
                 <XIcon size={16} />
               </button>
