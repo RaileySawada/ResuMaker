@@ -15,7 +15,12 @@ interface Props {
 
 const NAVY = "rgb(27, 45, 85)";
 const ACCENT = "#475569";
-const LIGHT = "#f5f5f5";
+const SIDEBAR_GRADIENT =
+  "linear-gradient(160deg, #f8fbff 0%, #ebf3ff 56%, #dbeafe 100%)";
+const SIDE_HEADING = "#1e3a8a";
+const SIDE_TEXT = "#1f2937";
+const SIDE_MUTED = "#475569";
+const SIDE_SOFT = "#64748b";
 
 type SectionProps = {
   title: string;
@@ -31,8 +36,8 @@ function SideSection({ title, children }: SectionProps) {
           fontWeight: "800",
           letterSpacing: "2px",
           textTransform: "uppercase" as const,
-          color: LIGHT,
-          borderBottom: `1pt solid rgba(255,255,255,0.2)`,
+          color: SIDE_HEADING,
+          borderBottom: "1pt solid rgba(30, 58, 138, 0.2)",
           paddingBottom: "3pt",
           marginBottom: "7pt",
         }}
@@ -113,9 +118,9 @@ export default function ModernTemplate({ data }: Props) {
       <div
         style={{
           width: "40%",
-          background: NAVY,
+          background: SIDEBAR_GRADIENT,
           padding: "28pt 18pt",
-          color: "#fff",
+          color: SIDE_TEXT,
           flexShrink: 0,
         }}
       >
@@ -126,7 +131,7 @@ export default function ModernTemplate({ data }: Props) {
               style={{
                 fontSize: nameFontSize,
                 fontWeight: "800",
-                color: "#fff",
+                color: SIDE_HEADING,
                 lineHeight: "1.15",
                 marginBottom: "4pt",
                 overflowWrap: "anywhere",
@@ -139,7 +144,7 @@ export default function ModernTemplate({ data }: Props) {
             <div
               style={{
                 fontSize: "8.5pt",
-                color: "rgba(255,255,255,0.65)",
+                color: SIDE_MUTED,
                 letterSpacing: "0.5px",
                 marginTop: "4pt",
               }}
@@ -155,14 +160,14 @@ export default function ModernTemplate({ data }: Props) {
             <div
               style={{
                 fontSize: "8pt",
-                color: "rgba(255,255,255,0.75)",
+                color: SIDE_MUTED,
                 lineHeight: "1.8",
               }}
             >
-              {p.birthDate && <div style={{ marginBottom: "4pt" }}><span style={{ color: "#fff", fontWeight: 600 }}>Birth Date:</span> <span>{formatCalendarDate(p.birthDate)}</span></div>}
-              {p.sex && <div style={{ marginBottom: "4pt" }}><span style={{ color: "#fff", fontWeight: 600 }}>Sex:</span> <span>{p.sex}</span></div>}
-              {p.civilStatus && <div style={{ marginBottom: "4pt" }}><span style={{ color: "#fff", fontWeight: 600 }}>Civil Status:</span> <span>{p.civilStatus}</span></div>}
-              {p.nationality && <div style={{ marginBottom: "4pt" }}><span style={{ color: "#fff", fontWeight: 600 }}>Nationality:</span> <span>{p.nationality}</span></div>}
+              {p.birthDate && <div style={{ marginBottom: "4pt" }}><span style={{ color: SIDE_TEXT, fontWeight: 600 }}>Birth Date:</span> <span>{formatCalendarDate(p.birthDate)}</span></div>}
+              {p.sex && <div style={{ marginBottom: "4pt" }}><span style={{ color: SIDE_TEXT, fontWeight: 600 }}>Sex:</span> <span>{p.sex}</span></div>}
+              {p.civilStatus && <div style={{ marginBottom: "4pt" }}><span style={{ color: SIDE_TEXT, fontWeight: 600 }}>Civil Status:</span> <span>{p.civilStatus}</span></div>}
+              {p.nationality && <div style={{ marginBottom: "4pt" }}><span style={{ color: SIDE_TEXT, fontWeight: 600 }}>Nationality:</span> <span>{p.nationality}</span></div>}
             </div>
           </SideSection>
         )}
@@ -178,7 +183,7 @@ export default function ModernTemplate({ data }: Props) {
             <div
               style={{
                 fontSize: "8pt",
-                color: "rgba(255,255,255,0.75)",
+                color: SIDE_MUTED,
                 lineHeight: "1.8",
               }}
             >
@@ -210,7 +215,7 @@ export default function ModernTemplate({ data }: Props) {
                       style={{
                         fontSize: "7.5pt",
                         fontWeight: "700",
-                        color: "rgba(255,255,255,0.55)",
+                        color: SIDE_SOFT,
                         marginBottom: "3pt",
                         textTransform: "uppercase" as const,
                         letterSpacing: "0.8px",
@@ -230,12 +235,12 @@ export default function ModernTemplate({ data }: Props) {
                       <span
                         key={i}
                         style={{
-                          background: "rgba(255,255,255,0.12)",
-                          border: "0.5pt solid rgba(255,255,255,0.2)",
+                          background: "rgba(148, 163, 184, 0.16)",
+                          border: "0.5pt solid rgba(100, 116, 139, 0.35)",
                           borderRadius: "2pt",
                           padding: "1.5pt 5pt",
                           fontSize: "7.5pt",
-                          color: "#fff",
+                          color: SIDE_TEXT,
                         }}
                       >
                         {skill}
@@ -260,10 +265,10 @@ export default function ModernTemplate({ data }: Props) {
                   marginBottom: "3pt",
                 }}
               >
-                <span style={{ color: "#fff", fontWeight: "600" }}>
+                <span style={{ color: SIDE_TEXT, fontWeight: "600" }}>
                   {l.name}
                 </span>
-                <span style={{ color: "rgba(255,255,255,0.55)" }}>
+                <span style={{ color: SIDE_SOFT }}>
                   {l.proficiency}
                 </span>
               </div>
@@ -277,12 +282,12 @@ export default function ModernTemplate({ data }: Props) {
             {certifications.map((c) => (
               <div key={c.id} style={{ marginBottom: "6pt" }}>
                 <div
-                  style={{ fontSize: "8pt", color: "#fff", fontWeight: "600" }}
+                  style={{ fontSize: "8pt", color: SIDE_TEXT, fontWeight: "600" }}
                 >
                   {c.name}
                 </div>
                 <div
-                  style={{ fontSize: "7.5pt", color: "rgba(255,255,255,0.55)" }}
+                  style={{ fontSize: "7.5pt", color: SIDE_SOFT }}
                 >
                   {c.issuer}
                   {c.issueDate
@@ -299,11 +304,11 @@ export default function ModernTemplate({ data }: Props) {
           <SideSection title="Awards">
             {awards.map((a) => (
               <div key={a.id} style={{ marginBottom: "5pt", fontSize: "8pt" }}>
-                <div style={{ color: "#fff", fontWeight: "600" }}>
+                <div style={{ color: SIDE_TEXT, fontWeight: "600" }}>
                   {a.title}
                 </div>
                 {a.issuer && (
-                  <div style={{ color: "rgba(255,255,255,0.55)" }}>
+                  <div style={{ color: SIDE_SOFT }}>
                     {a.issuer}
                   </div>
                 )}
