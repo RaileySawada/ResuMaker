@@ -12,6 +12,10 @@ export interface PersonalInfo {
   email: string;
   phone: string;
   location: string;
+  birthDate: string;
+  sex: string;
+  civilStatus: string;
+  nationality: string;
   linkedin: string;
   github: string;
   website: string;

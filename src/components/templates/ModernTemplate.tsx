@@ -1,7 +1,12 @@
 
 import type { ReactNode } from "react";
 import type { ResumeData } from "../../lib/types";
-import { formatDateRange, parseBullets, parseCommaList } from "../../lib/utils";
+import {
+  formatCalendarDate,
+  formatDateRange,
+  parseBullets,
+  parseCommaList,
+} from "../../lib/utils";
 import { MailIcon, PhoneIcon, MapPinIcon, LinkedinIcon, GithubIcon, GlobeIcon } from "../Icons";
 
 interface Props {
@@ -9,7 +14,7 @@ interface Props {
 }
 
 const NAVY = "rgb(27, 45, 85)";
-const ACCENT = "#b91c1c";
+const ACCENT = "#475569";
 const LIGHT = "#f5f5f5";
 
 type SectionProps = {
@@ -83,6 +88,15 @@ export default function ModernTemplate({ data }: Props) {
     awards,
     volunteer,
   } = data;
+  const fullName = p.fullName.trim();
+  const nameFontSize =
+    fullName.length > 28
+      ? "13pt"
+      : fullName.length > 22
+        ? "14pt"
+        : fullName.length > 16
+          ? "15pt"
+          : "16pt";
 
   return (
     <div
@@ -90,7 +104,7 @@ export default function ModernTemplate({ data }: Props) {
         fontFamily: "'DM Sans', 'Helvetica Neue', Arial, sans-serif",
         display: "flex",
         flex: 1,
-        minHeight: "1123px",
+        minHeight: "var(--resume-a4-height)",
         background: "#fff",
         width: "100%",
       }}
@@ -98,7 +112,7 @@ export default function ModernTemplate({ data }: Props) {
       {/* Sidebar */}
       <div
         style={{
-          width: "32%",
+          width: "40%",
           background: NAVY,
           padding: "28pt 18pt",
           color: "#fff",
@@ -107,21 +121,18 @@ export default function ModernTemplate({ data }: Props) {
       >
         {/* Name block */}
         <div style={{ marginBottom: "16pt" }}>
-          {p.fullName && (
+          {fullName && (
             <div
               style={{
-                fontSize: "16pt",
+                fontSize: nameFontSize,
                 fontWeight: "800",
                 color: "#fff",
-                lineHeight: "1.2",
+                lineHeight: "1.15",
                 marginBottom: "4pt",
+                overflowWrap: "anywhere",
               }}
             >
-              {p.fullName.split(" ").map((n, i) => (
-                <div key={i} style={{ color: i === 0 ? "#fff" : LIGHT }}>
-                  {n}
-                </div>
-              ))}
+              {fullName}
             </div>
           )}
           {p.jobTitle && (
@@ -137,6 +148,24 @@ export default function ModernTemplate({ data }: Props) {
             </div>
           )}
         </div>
+
+        {/* Personal Information */}
+        {(p.birthDate || p.sex || p.civilStatus || p.nationality) && (
+          <SideSection title="Personal Information">
+            <div
+              style={{
+                fontSize: "8pt",
+                color: "rgba(255,255,255,0.75)",
+                lineHeight: "1.8",
+              }}
+            >
+              {p.birthDate && <div style={{ marginBottom: "4pt" }}><span style={{ color: "#fff", fontWeight: 600 }}>Birth Date:</span> <span>{formatCalendarDate(p.birthDate)}</span></div>}
+              {p.sex && <div style={{ marginBottom: "4pt" }}><span style={{ color: "#fff", fontWeight: 600 }}>Sex:</span> <span>{p.sex}</span></div>}
+              {p.civilStatus && <div style={{ marginBottom: "4pt" }}><span style={{ color: "#fff", fontWeight: 600 }}>Civil Status:</span> <span>{p.civilStatus}</span></div>}
+              {p.nationality && <div style={{ marginBottom: "4pt" }}><span style={{ color: "#fff", fontWeight: 600 }}>Nationality:</span> <span>{p.nationality}</span></div>}
+            </div>
+          </SideSection>
+        )}
 
         {/* Contact */}
         {(p.email ||
@@ -296,7 +325,7 @@ export default function ModernTemplate({ data }: Props) {
       >
         {/* Summary */}
         {summary && (
-          <MainSection title="Profile">
+          <MainSection title="Objectives">
             <p
               style={{
                 fontSize: "9.5pt",

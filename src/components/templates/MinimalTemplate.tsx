@@ -1,6 +1,11 @@
 
 import type { ResumeData } from "../../lib/types";
-import { formatDateRange, parseBullets, parseCommaList } from "../../lib/utils";
+import {
+  formatCalendarDate,
+  formatDateRange,
+  parseBullets,
+  parseCommaList,
+} from "../../lib/utils";
 import { MailIcon, PhoneIcon, MapPinIcon, LinkedinIcon, GithubIcon, GlobeIcon } from "../Icons";
 
 interface Props {
@@ -125,7 +130,7 @@ export default function MinimalTemplate({ data }: Props) {
         display: "flex",
         flexDirection: "column",
         flex: 1,
-        minHeight: "1123px",
+        minHeight: "var(--resume-a4-height)",
         width: "100%",
       }}
     >
@@ -155,30 +160,76 @@ export default function MinimalTemplate({ data }: Props) {
             {p.jobTitle}
           </div>
         )}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap" as const,
-            gap: "0 16pt",
-            fontSize: "7.5pt",
-            color: "#888",
-          }}
-        >
-          {p.email && <span style={{ display: "flex", alignItems: "center", gap: "4pt" }}><MailIcon size={10} /> {p.email}</span>}
-          {p.phone && <span style={{ display: "flex", alignItems: "center", gap: "4pt" }}><PhoneIcon size={10} /> {p.phone}</span>}
-          {p.location && <span style={{ display: "flex", alignItems: "center", gap: "4pt" }}><MapPinIcon size={10} /> {p.location}</span>}
-          {p.linkedin && (
-            <span style={{ display: "flex", alignItems: "center", gap: "4pt" }}><LinkedinIcon size={10} /> {p.linkedin.replace(/^https?:\/\/(www\.)?/, "")}</span>
-          )}
-          {p.github && (
-            <span style={{ display: "flex", alignItems: "center", gap: "4pt" }}><GithubIcon size={10} /> {p.github.replace(/^https?:\/\/(www\.)?/, "")}</span>
-          )}
-          {p.website && <span style={{ display: "flex", alignItems: "center", gap: "4pt" }}><GlobeIcon size={10} /> {p.website.replace(/^https?:\/\//, "")}</span>}
-        </div>
+        {(p.birthDate || p.sex || p.civilStatus || p.nationality) && (
+          <div style={{ marginBottom: "7pt" }}>
+            <div
+              style={{
+                fontSize: "7pt",
+                fontWeight: "700",
+                letterSpacing: "1.5px",
+                textTransform: "uppercase" as const,
+                color: "#777",
+                marginBottom: "3pt",
+              }}
+            >
+              Personal Information
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap" as const,
+                gap: "0 16pt",
+                fontSize: "7.5pt",
+                color: "#888",
+              }}
+            >
+              {p.birthDate && <span>Birth Date: {formatCalendarDate(p.birthDate)}</span>}
+              {p.sex && <span>Sex: {p.sex}</span>}
+              {p.civilStatus && <span>Civil Status: {p.civilStatus}</span>}
+              {p.nationality && <span>Nationality: {p.nationality}</span>}
+            </div>
+          </div>
+        )}
+        {(p.email || p.phone || p.location || p.linkedin || p.github || p.website) && (
+          <div>
+            <div
+              style={{
+                fontSize: "7pt",
+                fontWeight: "700",
+                letterSpacing: "1.5px",
+                textTransform: "uppercase" as const,
+                color: "#777",
+                marginBottom: "3pt",
+              }}
+            >
+              Contact
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap" as const,
+                gap: "0 16pt",
+                fontSize: "7.5pt",
+                color: "#888",
+              }}
+            >
+              {p.email && <span style={{ display: "flex", alignItems: "center", gap: "4pt" }}><MailIcon size={10} /> {p.email}</span>}
+              {p.phone && <span style={{ display: "flex", alignItems: "center", gap: "4pt" }}><PhoneIcon size={10} /> {p.phone}</span>}
+              {p.location && <span style={{ display: "flex", alignItems: "center", gap: "4pt" }}><MapPinIcon size={10} /> {p.location}</span>}
+              {p.linkedin && (
+                <span style={{ display: "flex", alignItems: "center", gap: "4pt" }}><LinkedinIcon size={10} /> {p.linkedin.replace(/^https?:\/\/(www\.)?/, "")}</span>
+              )}
+              {p.github && (
+                <span style={{ display: "flex", alignItems: "center", gap: "4pt" }}><GithubIcon size={10} /> {p.github.replace(/^https?:\/\/(www\.)?/, "")}</span>
+              )}
+              {p.website && <span style={{ display: "flex", alignItems: "center", gap: "4pt" }}><GlobeIcon size={10} /> {p.website.replace(/^https?:\/\//, "")}</span>}
+            </div>
+          </div>
+        )}
       </div>
 
       {summary && (
-        <Section title="Profile">
+        <Section title="Objectives">
           <p
             style={{
               fontSize: "9pt",

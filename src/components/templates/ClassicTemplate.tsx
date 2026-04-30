@@ -1,6 +1,11 @@
 
 import type { ResumeData } from "../../lib/types";
-import { formatDateRange, parseBullets, parseCommaList } from "../../lib/utils";
+import {
+  formatCalendarDate,
+  formatDateRange,
+  parseBullets,
+  parseCommaList,
+} from "../../lib/utils";
 import { MailIcon, PhoneIcon, MapPinIcon, LinkedinIcon, GithubIcon, GlobeIcon } from "../Icons";
 
 interface Props {
@@ -18,7 +23,7 @@ const s = {
     display: "flex",
     flexDirection: "column",
     flex: 1,
-    minHeight: "1123px",
+    minHeight: "var(--resume-a4-height)",
     width: "100%",
   } as React.CSSProperties,
   name: {
@@ -30,7 +35,7 @@ const s = {
   } as React.CSSProperties,
   jobTitle: {
     fontSize: "11pt",
-    color: "#b91c1c",
+    color: "#444",
     fontStyle: "italic",
     marginBottom: "6pt",
   } as React.CSSProperties,
@@ -49,6 +54,25 @@ const s = {
     display: "flex",
     alignItems: "center",
     gap: "4pt",
+  } as React.CSSProperties,
+  metaTitle: {
+    fontSize: "8pt",
+    fontWeight: "700",
+    letterSpacing: "1.2px",
+    textTransform: "uppercase" as const,
+    color: "#222",
+    marginBottom: "3pt",
+  } as React.CSSProperties,
+  personalLine: {
+    fontSize: "8.5pt",
+    color: "#555",
+    display: "flex",
+    flexWrap: "wrap" as const,
+    gap: "0 16pt",
+    borderTop: "1.5pt solid #111111",
+    borderBottom: "0.5pt solid #ddd",
+    padding: "5pt 0",
+    marginBottom: "8pt",
   } as React.CSSProperties,
   sectionTitle: {
     fontSize: "9pt",
@@ -94,13 +118,13 @@ const s = {
   bulletDot: {
     flexShrink: 0,
     marginTop: "0.5pt",
-    color: "#b91c1c",
+    color: "#666",
     fontStyle: "normal",
   } as React.CSSProperties,
   tag: {
     display: "inline-block",
-    background: "#fee2e2",
-    color: "#991b1b",
+    background: "#f3f4f6",
+    color: "#374151",
     borderRadius: "3pt",
     padding: "1pt 5pt",
     fontSize: "8pt",
@@ -136,7 +160,9 @@ export default function ClassicTemplate({ data }: Props) {
     awards,
     volunteer,
   } = data;
-  const hasExp = experience.length > 0;
+  const hasPersonalInfo = Boolean(
+    p.birthDate || p.sex || p.civilStatus || p.nationality,
+  );
 
   return (
     <div style={s.page}>
@@ -146,34 +172,55 @@ export default function ClassicTemplate({ data }: Props) {
         {p.jobTitle && <div style={s.jobTitle}>{p.jobTitle}</div>}
       </div>
 
+      {/* Personal Information */}
+      {hasPersonalInfo && (
+        <>
+          <div style={s.metaTitle}>Personal Information</div>
+          <div style={s.personalLine}>
+            {p.birthDate && <span style={s.contactItem}>Birth Date: {formatCalendarDate(p.birthDate)}</span>}
+            {p.sex && <span style={s.contactItem}>Sex: {p.sex}</span>}
+            {p.civilStatus && <span style={s.contactItem}>Civil Status: {p.civilStatus}</span>}
+            {p.nationality && <span style={s.contactItem}>Nationality: {p.nationality}</span>}
+          </div>
+        </>
+      )}
+
       {/* Contact */}
-      <div style={s.contactLine}>
-        {p.email && <span style={s.contactItem}><MailIcon size={12} /> {p.email}</span>}
-        {p.phone && <span style={s.contactItem}><PhoneIcon size={12} /> {p.phone}</span>}
-        {p.location && <span style={s.contactItem}><MapPinIcon size={12} /> {p.location}</span>}
-        {p.linkedin && (
-          <span style={s.contactItem}>
-            <LinkedinIcon size={12} /> {p.linkedin.replace(/^https?:\/\/(www\.)?/, "")}
-          </span>
-        )}
-        {p.github && (
-          <span style={s.contactItem}>
-            <GithubIcon size={12} /> {p.github.replace(/^https?:\/\/(www\.)?/, "")}
-          </span>
-        )}
-        {p.website && (
-          <span style={s.contactItem}>
-            <GlobeIcon size={12} /> {p.website.replace(/^https?:\/\//, "")}
-          </span>
-        )}
-      </div>
+      {(p.email || p.phone || p.location || p.linkedin || p.github || p.website) && (
+        <>
+          <div style={s.metaTitle}>Contact</div>
+          <div
+            style={{
+              ...s.contactLine,
+              borderTop: hasPersonalInfo ? "0.5pt solid #ddd" : "1.5pt solid #111111",
+            }}
+          >
+            {p.email && <span style={s.contactItem}><MailIcon size={12} /> {p.email}</span>}
+            {p.phone && <span style={s.contactItem}><PhoneIcon size={12} /> {p.phone}</span>}
+            {p.location && <span style={s.contactItem}><MapPinIcon size={12} /> {p.location}</span>}
+            {p.linkedin && (
+              <span style={s.contactItem}>
+                <LinkedinIcon size={12} /> {p.linkedin.replace(/^https?:\/\/(www\.)?/, "")}
+              </span>
+            )}
+            {p.github && (
+              <span style={s.contactItem}>
+                <GithubIcon size={12} /> {p.github.replace(/^https?:\/\/(www\.)?/, "")}
+              </span>
+            )}
+            {p.website && (
+              <span style={s.contactItem}>
+                <GlobeIcon size={12} /> {p.website.replace(/^https?:\/\//, "")}
+              </span>
+            )}
+          </div>
+        </>
+      )}
 
       {/* Summary */}
       {summary && (
         <>
-          <div style={s.sectionTitle}>
-            {hasExp ? "Professional Summary" : "Objective"}
-          </div>
+          <div style={s.sectionTitle}>Objectives</div>
           <p style={{ fontSize: "9.5pt", color: "#333", lineHeight: "1.6" }}>
             {summary}
           </p>
@@ -274,7 +321,7 @@ export default function ClassicTemplate({ data }: Props) {
                     <span
                       style={{
                         fontSize: "8pt",
-                        color: "#b91c1c",
+                        color: "#555",
                         fontWeight: "normal",
                         fontStyle: "italic",
                       }}

@@ -89,6 +89,30 @@ export default function PersonalInfoForm({ data, onChange }: Props) {
           />
         </div>
         <Field
+          label="Birth Date"
+          value={data.birthDate}
+          onChange={(v) => onChange("birthDate", v)}
+          type="date"
+        />
+        <Field
+          label="Sex"
+          value={data.sex}
+          onChange={(v) => onChange("sex", v)}
+          placeholder="Male / Female"
+        />
+        <Field
+          label="Civil Status"
+          value={data.civilStatus}
+          onChange={(v) => onChange("civilStatus", v)}
+          placeholder="Single"
+        />
+        <Field
+          label="Nationality"
+          value={data.nationality}
+          onChange={(v) => onChange("nationality", v)}
+          placeholder="Filipino"
+        />
+        <Field
           label="LinkedIn URL"
           value={data.linkedin}
           onChange={(v) => onChange("linkedin", v)}

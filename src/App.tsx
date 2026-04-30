@@ -51,8 +51,9 @@ const TEMPLATES: { id: TemplateType; label: string; accent: string }[] = [
   { id: "minimal", label: "Minimal", accent: "#111827" },
 ];
 
-const A4_WIDTH_PX = 794;
-const A4_HEIGHT_PX = 1123;
+const A4_WIDTH_PX = 793.7008; // 210mm at 96 CSS DPI
+const A4_HEIGHT_PX = 1122.5197; // 297mm at 96 CSS DPI
+const RESUME_CONTENT_MIN_SCALE = 0.1;
 const PREVIEW_MIN_SCALE = 0.2;
 const PREVIEW_MAX_SCALE = 2;
 const PREVIEW_SCALE_STEP = 0.1;
@@ -158,12 +159,15 @@ export default function App() {
   const [previewScale, setPreviewScale] = useState(
     () => loadStoredPreviewScale() ?? 1,
   );
+  const [resumeContentScale, setResumeContentScale] = useState(1);
   const [previewPan, setPreviewPan] = useState<PreviewPoint>({ x: 0, y: 0 });
   const [isPanMode, setIsPanMode] = useState(false);
   const [isDraggingPreview, setIsDraggingPreview] = useState(false);
   const previewPanelRef = useRef<HTMLElement | null>(null);
   const previewViewportRef = useRef<HTMLDivElement | null>(null);
   const previewCanvasRef = useRef<HTMLDivElement | null>(null);
+  const resumePaperRef = useRef<HTMLDivElement | null>(null);
+  const resumeContentRef = useRef<HTMLDivElement | null>(null);
   const previewScaleRef = useRef(previewScale);
   const previewPanRef = useRef<PreviewPoint>({ x: 0, y: 0 });
   const hasInitializedPreviewScaleRef = useRef(false);
@@ -231,6 +235,26 @@ export default function App() {
     previewPanRef.current = previewPan;
   }, [previewPan]);
 
+  const updateResumeContentScale = useCallback(() => {
+    const paper = resumePaperRef.current;
+    const content = resumeContentRef.current;
+    if (!paper || !content) return;
+
+    const pageHeight = paper.clientHeight || A4_HEIGHT_PX;
+    const contentHeight = content.scrollHeight;
+    if (!pageHeight || !contentHeight) return;
+
+    const nextScale = clamp(
+      Math.min(1, pageHeight / contentHeight),
+      RESUME_CONTENT_MIN_SCALE,
+      1,
+    );
+
+    setResumeContentScale((current) =>
+      Math.abs(current - nextScale) > 0.001 ? nextScale : current,
+    );
+  }, []);
+
   const handleReset = () => {
     setShowResetConfirm(true);
   };
@@ -261,6 +285,47 @@ export default function App() {
     return () =>
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
+
+  useEffect(() => {
+    const paper = resumePaperRef.current;
+    const content = resumeContentRef.current;
+    if (!paper || !content) return;
+
+    let rafId: number | null = null;
+    const scheduleFitCheck = () => {
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+
+      rafId = window.requestAnimationFrame(() => {
+        updateResumeContentScale();
+        rafId = null;
+      });
+    };
+
+    scheduleFitCheck();
+    const observer = new ResizeObserver(scheduleFitCheck);
+    observer.observe(paper);
+    observer.observe(content);
+    window.addEventListener("resize", scheduleFitCheck);
+
+    const fonts = document.fonts;
+    let isCancelled = false;
+    fonts.ready.then(() => {
+      if (!isCancelled) {
+        scheduleFitCheck();
+      }
+    });
+
+    return () => {
+      isCancelled = true;
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+      observer.disconnect();
+      window.removeEventListener("resize", scheduleFitCheck);
+    };
+  }, [updateResumeContentScale, view, isPreviewFullscreen, data.template]);
 
   const clampPanToViewport = useCallback(
     (
@@ -623,7 +688,7 @@ export default function App() {
             </FormSection>
 
             <FormSection
-              title="Summary"
+              title="Objectives"
               icon={<FileTextIcon size={18} />}
               isOpen={openSection === "summary"}
               onToggle={() => toggle("summary")}
@@ -860,11 +925,22 @@ export default function App() {
               <div
                 id="resume-preview"
                 className="resume-paper"
+                ref={resumePaperRef}
                 style={{
                   transform: `translate(-50%, -50%) translate(${previewPan.x}px, ${previewPan.y}px) scale(${previewScale})`,
                 }}
               >
-                {renderTemplate()}
+                <div
+                  className="resume-fit-scale-layer"
+                  style={{
+                    transform: `scale(${resumeContentScale})`,
+                    width: `${100 / resumeContentScale}%`,
+                  }}
+                >
+                  <div className="resume-fit-content" ref={resumeContentRef}>
+                    {renderTemplate()}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

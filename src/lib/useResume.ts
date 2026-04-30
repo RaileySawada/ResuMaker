@@ -15,14 +15,32 @@ import type {
 import { saveToStorage, loadFromStorage, clearStorage } from "./store";
 import { createEmptyResume } from "./defaultData";
 
-const normalizeResumeData = (resume: ResumeData): ResumeData => ({
-  ...resume,
-  skills: resume.skills.map((skill) =>
-    skill.category === "Technical Skills" && !skill.items.trim()
-      ? { ...skill, category: "" }
-      : skill,
-  ),
-});
+const normalizeResumeData = (resume: Partial<ResumeData>): ResumeData => {
+  const base = createEmptyResume();
+  const merged: ResumeData = {
+    ...base,
+    ...resume,
+    personal: { ...base.personal, ...resume.personal },
+    experience: resume.experience ?? base.experience,
+    education: resume.education ?? base.education,
+    skills: resume.skills ?? base.skills,
+    projects: resume.projects ?? base.projects,
+    certifications: resume.certifications ?? base.certifications,
+    languages: resume.languages ?? base.languages,
+    awards: resume.awards ?? base.awards,
+    volunteer: resume.volunteer ?? base.volunteer,
+    template: resume.template ?? base.template,
+  };
+
+  return {
+    ...merged,
+    skills: merged.skills.map((skill) =>
+      skill.category === "Technical Skills" && !skill.items.trim()
+        ? { ...skill, category: "" }
+        : skill,
+    ),
+  };
+};
 
 export function useResume() {
   const [data, setData] = useState<ResumeData>(
