@@ -78,7 +78,7 @@ function InputField({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
-        className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/30 transition shadow-sm disabled:opacity-40 disabled:bg-zinc-100 dark:disabled:bg-zinc-900/50"
+        className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm disabled:opacity-40 disabled:bg-zinc-100 dark:disabled:bg-zinc-900/50"
       />
     </div>
   );
@@ -117,7 +117,7 @@ export default function ExtrasForm(props: Props) {
                     proficiency: e.target.value as LanguageProficiency,
                   })
                 }
-                className="bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/50 text-[12px] font-medium text-indigo-600 dark:text-indigo-200 rounded-lg px-2 py-1.5 focus:outline-none focus:border-indigo-500 cursor-pointer"
+                className="bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/50 text-[12px] font-medium text-zinc-700 dark:text-zinc-200 rounded-lg px-2 py-1.5 focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-500 cursor-pointer"
               >
                 {PROFICIENCY_LEVELS.map((p) => (
                   <option key={p} value={p} className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200">
@@ -135,7 +135,7 @@ export default function ExtrasForm(props: Props) {
           ))}
           <button
             onClick={() => props.onAddLanguage(createLanguage())}
-            className="w-full flex items-center justify-center gap-2 border border-dashed border-zinc-300 dark:border-zinc-700/80 rounded-xl py-3 text-[13px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-300 hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all active:scale-[0.98]"
+            className="w-full flex items-center justify-center gap-2 border border-dashed border-zinc-300 dark:border-zinc-700/80 rounded-xl py-3 text-[13px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:border-zinc-500/50 hover:bg-zinc-500/5 transition-all active:scale-[0.98]"
           >
             <PlusIcon size={16} />
             Add Language
@@ -158,7 +158,7 @@ export default function ExtrasForm(props: Props) {
             >
               <button
                 onClick={() => props.onRemoveAward(a.id)}
-                className="absolute top-3 right-3 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-md opacity-0 group-hover:opacity-100"
+                className="absolute top-3 right-3 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-md"
               >
                 <XIcon size={16} />
               </button>
@@ -198,7 +198,7 @@ export default function ExtrasForm(props: Props) {
           ))}
           <button
             onClick={() => props.onAddAward(createAward())}
-            className="w-full flex items-center justify-center gap-2 border border-dashed border-zinc-300 dark:border-zinc-700/80 rounded-xl py-3 text-[13px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-300 hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all active:scale-[0.98]"
+            className="w-full flex items-center justify-center gap-2 border border-dashed border-zinc-300 dark:border-zinc-700/80 rounded-xl py-3 text-[13px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:border-zinc-500/50 hover:bg-zinc-500/5 transition-all active:scale-[0.98]"
           >
             <PlusIcon size={16} />
             Add Award
@@ -226,7 +226,7 @@ export default function ExtrasForm(props: Props) {
                 }
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors">
+                  <p className="text-[13px] font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
                     {v.role || v.organization || "New Volunteer Role"}
                   </p>
                   {v.organization && (
@@ -240,7 +240,7 @@ export default function ExtrasForm(props: Props) {
                     e.stopPropagation();
                     props.onRemoveVolunteer(v.id);
                   }}
-                  className="text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-md opacity-0 group-hover:opacity-100"
+                  className="text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-md"
                 >
                   <XIcon size={16} />
                 </button>
@@ -285,8 +285,8 @@ export default function ExtrasForm(props: Props) {
                       disabled={v.isCurrent}
                     />
                   </div>
-                  <label className="flex items-center gap-2 cursor-pointer w-fit group">
-                    <div className="relative flex items-center justify-center">
+                  <label className="flex w-fit max-w-full items-center gap-2 cursor-pointer group">
+                    <div className="relative flex h-4 w-4 flex-none items-center justify-center">
                       <input
                         type="checkbox"
                         checked={v.isCurrent}
@@ -295,9 +295,19 @@ export default function ExtrasForm(props: Props) {
                             isCurrent: e.target.checked,
                           })
                         }
-                        className="peer appearance-none w-4 h-4 border border-zinc-300 dark:border-zinc-600 rounded bg-white dark:bg-zinc-900/50 checked:bg-indigo-500 checked:border-indigo-500 transition-colors cursor-pointer"
+                        className="peer appearance-none w-4 h-4 border border-zinc-300 dark:border-zinc-600 rounded bg-white dark:bg-zinc-900/50 checked:bg-zinc-950 checked:border-zinc-950 dark:checked:bg-white dark:checked:border-white transition-colors cursor-pointer"
                       />
-                      <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                      <svg
+                        className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 pointer-events-none peer-checked:opacity-100 dark:text-zinc-950"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
                     </div>
                     <span className="text-[12px] font-medium text-zinc-600 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-300 transition-colors">
                       Currently volunteering
@@ -316,7 +326,7 @@ export default function ExtrasForm(props: Props) {
                       }
                       rows={3}
                       placeholder="Organized fundraising events for 200+ attendees..."
-                      className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/30 transition shadow-sm resize-none"
+                      className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm resize-none"
                     />
                   </div>
                 </div>
@@ -325,7 +335,7 @@ export default function ExtrasForm(props: Props) {
           ))}
           <button
             onClick={() => props.onAddVolunteer(createVolunteer())}
-            className="w-full flex items-center justify-center gap-2 border border-dashed border-zinc-300 dark:border-zinc-700/80 rounded-xl py-3 text-[13px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-300 hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all active:scale-[0.98]"
+            className="w-full flex items-center justify-center gap-2 border border-dashed border-zinc-300 dark:border-zinc-700/80 rounded-xl py-3 text-[13px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:border-zinc-500/50 hover:bg-zinc-500/5 transition-all active:scale-[0.98]"
           >
             <PlusIcon size={16} />
             Add Volunteer Work

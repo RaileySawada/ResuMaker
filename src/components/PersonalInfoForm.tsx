@@ -26,7 +26,7 @@ const Field = ({
         {label}
       </label>
       {required && !value && (
-        <span className="text-[9px] font-bold text-red-500/80 uppercase tracking-tighter animate-pulse">
+        <span className="text-[9px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-tighter">
           Required
         </span>
       )}
@@ -38,8 +38,8 @@ const Field = ({
       placeholder={placeholder}
       className={`w-full bg-zinc-50 dark:bg-zinc-900/50 border rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-1 transition shadow-sm ${
         required && !value
-          ? "border-red-500/30 focus:border-red-500 focus:ring-red-500/20"
-          : "border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 focus:ring-indigo-500/30"
+          ? "border-red-500/30 focus:border-zinc-900 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20"
+          : "border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20"
       }`}
     />
   </div>

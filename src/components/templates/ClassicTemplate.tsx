@@ -24,13 +24,13 @@ const s = {
   name: {
     fontSize: "24pt",
     fontWeight: "700",
-    color: "#0f2044",
+    color: "#111111",
     letterSpacing: "-0.5px",
     marginBottom: "2pt",
   } as React.CSSProperties,
   jobTitle: {
     fontSize: "11pt",
-    color: "#3b5998",
+    color: "#b91c1c",
     fontStyle: "italic",
     marginBottom: "6pt",
   } as React.CSSProperties,
@@ -40,7 +40,7 @@ const s = {
     display: "flex",
     flexWrap: "wrap" as const,
     gap: "0 16pt",
-    borderTop: "1.5pt solid #0f2044",
+    borderTop: "1.5pt solid #111111",
     borderBottom: "0.5pt solid #ddd",
     padding: "5pt 0",
     marginBottom: "14pt",
@@ -53,10 +53,10 @@ const s = {
   sectionTitle: {
     fontSize: "9pt",
     fontWeight: "700",
-    color: "#0f2044",
+    color: "#111111",
     letterSpacing: "2px",
     textTransform: "uppercase" as const,
-    borderBottom: "1pt solid #0f2044",
+    borderBottom: "1pt solid #111111",
     paddingBottom: "2pt",
     marginBottom: "8pt",
     marginTop: "14pt",
@@ -94,13 +94,13 @@ const s = {
   bulletDot: {
     flexShrink: 0,
     marginTop: "0.5pt",
-    color: "#3b5998",
+    color: "#b91c1c",
     fontStyle: "normal",
   } as React.CSSProperties,
   tag: {
     display: "inline-block",
-    background: "#eef2ff",
-    color: "#3730a3",
+    background: "#fee2e2",
+    color: "#991b1b",
     borderRadius: "3pt",
     padding: "1pt 5pt",
     fontSize: "8pt",
@@ -274,7 +274,7 @@ export default function ClassicTemplate({ data }: Props) {
                     <span
                       style={{
                         fontSize: "8pt",
-                        color: "#3b5998",
+                        color: "#b91c1c",
                         fontWeight: "normal",
                         fontStyle: "italic",
                       }}

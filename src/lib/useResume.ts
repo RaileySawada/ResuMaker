@@ -15,9 +15,18 @@ import type {
 import { saveToStorage, loadFromStorage, clearStorage } from "./store";
 import { createEmptyResume } from "./defaultData";
 
+const normalizeResumeData = (resume: ResumeData): ResumeData => ({
+  ...resume,
+  skills: resume.skills.map((skill) =>
+    skill.category === "Technical Skills" && !skill.items.trim()
+      ? { ...skill, category: "" }
+      : skill,
+  ),
+});
+
 export function useResume() {
   const [data, setData] = useState<ResumeData>(
-    () => loadFromStorage() ?? createEmptyResume(),
+    () => normalizeResumeData(loadFromStorage() ?? createEmptyResume()),
   );
 
   useEffect(() => {

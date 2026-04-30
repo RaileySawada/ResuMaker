@@ -38,11 +38,11 @@ export default function SkillsForm({
                 value={sg.category}
                 onChange={(e) => onUpdate(sg.id, { category: e.target.value })}
                 placeholder="Category (e.g. Programming Languages)"
-                className="flex-1 bg-transparent border-b border-zinc-200 dark:border-zinc-700/50 pb-1.5 text-[13px] font-bold text-indigo-600 dark:text-indigo-300 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-indigo-500 transition-colors"
+                className="flex-1 bg-transparent border-b border-zinc-200 dark:border-zinc-700/50 pb-1.5 text-[13px] font-bold text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-500 transition-colors"
               />
               <button
                 onClick={() => onRemove(sg.id)}
-                className="text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-md opacity-0 group-hover:opacity-100"
+                className="text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-md"
               >
                 <XIcon size={16} />
               </button>
@@ -51,7 +51,7 @@ export default function SkillsForm({
               value={sg.items}
               onChange={(e) => onUpdate(sg.id, { items: e.target.value })}
               placeholder="JavaScript, TypeScript, Python, Go"
-              className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/30 transition shadow-sm"
+              className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm"
             />
             {sg.items && (
               <div className="flex flex-wrap gap-2 pt-1.5">
@@ -62,7 +62,7 @@ export default function SkillsForm({
                   .map((skill, i) => (
                     <span
                       key={i}
-                      className="text-[11px] font-semibold bg-indigo-100 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/20 px-2.5 py-1 rounded-md"
+                      className="text-[11px] font-semibold bg-zinc-100 dark:bg-zinc-800/70 text-zinc-700 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700 px-2.5 py-1 rounded-md"
                     >
                       {skill}
                     </span>
@@ -75,7 +75,7 @@ export default function SkillsForm({
 
       <button
         onClick={() => onAdd(createSkillGroup())}
-        className="w-full flex items-center justify-center gap-2 border border-dashed border-zinc-300 dark:border-zinc-700/80 rounded-xl py-3 text-[13px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-300 hover:border-indigo-300 dark:hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all active:scale-[0.98]"
+        className="w-full flex items-center justify-center gap-2 border border-dashed border-zinc-300 dark:border-zinc-700/80 rounded-xl py-3 text-[13px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:border-zinc-500/50 hover:bg-zinc-500/5 transition-all active:scale-[0.98]"
       >
         <PlusIcon size={16} />
         Add Skill Group

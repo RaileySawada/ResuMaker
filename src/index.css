@@ -20,6 +20,109 @@ body,
   font-family: 'Inter', system-ui, sans-serif;
 }
 
+:root {
+  --resume-a4-width: 794px;
+  --resume-a4-height: 1123px;
+}
+
+.brand-logo {
+  filter: brightness(0) saturate(100%);
+}
+
+.dark .brand-logo {
+  filter: none;
+}
+
+.resume-preview-scroll {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  touch-action: none;
+  user-select: none;
+  z-index: 10;
+}
+
+.resume-canvas {
+  inset: 1rem 1rem 6.5rem;
+  overflow: visible;
+  position: absolute;
+}
+
+.resume-paper {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 8px 10px -6px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex: 0 0 var(--resume-a4-width);
+  flex-direction: column;
+  left: 50%;
+  min-height: var(--resume-a4-height);
+  min-width: var(--resume-a4-width);
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  transform-origin: center center;
+  will-change: transform;
+  width: var(--resume-a4-width);
+}
+
+#preview-panel:fullscreen {
+  background: #f4f4f5;
+  height: 100vh;
+  width: 100vw;
+}
+
+.dark #preview-panel:fullscreen {
+  background: #09090b;
+}
+
+.toast-pop-in {
+  animation: toast-pop-up 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.toast-pop-out {
+  animation: toast-pop-down 200ms ease-in both;
+  pointer-events: none;
+}
+
+@keyframes toast-pop-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.01);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toast-pop-down {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+}
+
+@media (min-width: 1024px) {
+  .resume-canvas {
+    inset: 2rem 5.25rem 2rem 2rem;
+  }
+}
+
 /* Ensure text inside the resume wraps nicely and doesn't overflow */
 .resume-paper * {
   overflow-wrap: anywhere;
@@ -94,11 +197,21 @@ body,
     top: 0 !important;
     width: 210mm !important;
     min-height: 297mm !important;
+    min-width: 210mm !important;
     margin: 0 !important;
     padding: 0 !important;
     box-shadow: none !important;
     border-radius: 0 !important;
     background: white !important;
+    transform: none !important;
+    transform-origin: top left !important;
+  }
+
+  .resume-preview-scroll,
+  .resume-canvas {
+    inset: auto !important;
+    overflow: visible !important;
+    position: static !important;
   }
 
   /* Ensure background colors in templates are printed */

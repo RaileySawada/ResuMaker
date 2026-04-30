@@ -34,7 +34,7 @@ function InputField({
           {label}
         </label>
         {required && !value && (
-          <span className="text-[9px] font-bold text-red-500/80 uppercase tracking-tighter animate-pulse">
+          <span className="text-[9px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-tighter">
             Required
           </span>
         )}
@@ -46,8 +46,8 @@ function InputField({
         placeholder={placeholder}
         disabled={disabled}
         className={`w-full bg-zinc-50 dark:bg-zinc-900/50 border rounded-lg px-3 py-2 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-1 transition shadow-sm disabled:opacity-40 disabled:bg-zinc-100 dark:disabled:bg-zinc-900/50 ${required && !value
-            ? "border-red-500/30 focus:border-red-500 focus:ring-red-500/20"
-            : "border-zinc-200 dark:border-zinc-800 focus:border-indigo-500 focus:ring-indigo-500/30"
+            ? "border-red-500/30 focus:border-zinc-900 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20"
+            : "border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20"
           }`}
       />
     </div>
@@ -72,7 +72,7 @@ function ExperienceCard({
         onClick={() => setExpanded((x) => !x)}
       >
         <div className="flex-1 min-w-0">
-          <p className="text-[13px] font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors">
+          <p className="text-[13px] font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
             {exp.position || exp.company || "New Experience"}
           </p>
           {exp.company && (
@@ -84,7 +84,7 @@ function ExperienceCard({
             e.stopPropagation();
             onRemove();
           }}
-          className="text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-md opacity-0 group-hover:opacity-100"
+          className="text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-md"
           title="Remove"
         >
           <XIcon size={16} />
@@ -144,7 +144,7 @@ function ExperienceCard({
                     endDate: e.target.checked ? "" : exp.endDate,
                   })
                 }
-                className="peer appearance-none w-4 h-4 border border-zinc-300 dark:border-zinc-600 rounded bg-white dark:bg-zinc-900/50 checked:bg-indigo-500 checked:border-indigo-500 transition-colors cursor-pointer"
+                className="peer appearance-none w-4 h-4 border border-zinc-300 dark:border-zinc-600 rounded bg-white dark:bg-zinc-900/50 checked:bg-zinc-950 checked:border-zinc-950 dark:checked:bg-white dark:checked:border-white transition-colors cursor-pointer"
               />
               <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
@@ -167,7 +167,7 @@ function ExperienceCard({
               placeholder={
                 "Built RESTful APIs serving 50K+ daily users\nReduced page load time by 40% through code optimization\nMentored 2 junior developers and conducted code reviews"
               }
-              className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/30 transition shadow-sm resize-none"
+              className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm resize-none"
             />
           </div>
         </div>
@@ -204,7 +204,7 @@ export default function ExperienceForm({
 
       <button
         onClick={() => onAdd(createExperience())}
-        className="w-full flex items-center justify-center gap-2 border border-dashed border-zinc-300 dark:border-zinc-700/80 rounded-xl py-3 text-[13px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-300 hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all active:scale-[0.98]"
+        className="w-full flex items-center justify-center gap-2 border border-dashed border-zinc-300 dark:border-zinc-700/80 rounded-xl py-3 text-[13px] font-bold text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:border-zinc-500/50 hover:bg-zinc-500/5 transition-all active:scale-[0.98]"
       >
         <PlusIcon size={16} />
         Add Experience

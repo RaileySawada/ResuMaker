@@ -25,10 +25,7 @@ export const createEmptyResume = (): ResumeData => ({
   summary: "",
   experience: [],
   education: [],
-  skills: [
-    { id: generateId(), category: "Technical Skills", items: "" },
-    { id: generateId(), category: "Soft Skills", items: "" },
-  ],
+  skills: [{ id: generateId(), category: "", items: "" }],
   projects: [],
   certifications: [],
   languages: [],

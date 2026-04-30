@@ -1,4 +1,5 @@
 
+import type { ReactNode } from "react";
 import type { ResumeData } from "../../lib/types";
 import { formatDateRange, parseBullets, parseCommaList } from "../../lib/utils";
 import { MailIcon, PhoneIcon, MapPinIcon, LinkedinIcon, GithubIcon, GlobeIcon } from "../Icons";
@@ -7,31 +8,17 @@ interface Props {
   data: ResumeData;
 }
 
-const NAVY = "#1b2d55";
-const ACCENT = "#4a6fa5";
-const LIGHT = "#eef2fa";
+const NAVY = "rgb(27, 45, 85)";
+const ACCENT = "#b91c1c";
+const LIGHT = "#f5f5f5";
 
-export default function ModernTemplate({ data }: Props) {
-  const {
-    personal: p,
-    summary,
-    experience,
-    education,
-    skills,
-    projects,
-    certifications,
-    languages,
-    awards,
-    volunteer,
-  } = data;
+type SectionProps = {
+  title: string;
+  children: ReactNode;
+};
 
-  const SideSection = ({
-    title,
-    children,
-  }: {
-    title: string;
-    children: React.ReactNode;
-  }) => (
+function SideSection({ title, children }: SectionProps) {
+  return (
     <div style={{ marginBottom: "14pt" }}>
       <div
         style={{
@@ -50,14 +37,10 @@ export default function ModernTemplate({ data }: Props) {
       {children}
     </div>
   );
+}
 
-  const MainSection = ({
-    title,
-    children,
-  }: {
-    title: string;
-    children: React.ReactNode;
-  }) => (
+function MainSection({ title, children }: SectionProps) {
+  return (
     <div style={{ marginBottom: "14pt" }}>
       <div
         style={{
@@ -85,6 +68,21 @@ export default function ModernTemplate({ data }: Props) {
       {children}
     </div>
   );
+}
+
+export default function ModernTemplate({ data }: Props) {
+  const {
+    personal: p,
+    summary,
+    experience,
+    education,
+    skills,
+    projects,
+    certifications,
+    languages,
+    awards,
+    volunteer,
+  } = data;
 
   return (
     <div
