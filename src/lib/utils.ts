@@ -19,8 +19,8 @@ const MONTHS = [
 export const formatMonthYear = (date: string): string => {
   if (!date) return "";
   const [year, month] = date.split("-");
-  const m = parseInt(month);
-  return isNaN(m) ? "" : `${MONTHS[m - 1]} ${year}`;
+  const m = Number.parseInt(month, 10);
+  return Number.isNaN(m) ? "" : `${MONTHS[m - 1]} ${year}`;
 };
 
 export const formatDateRange = (
@@ -33,13 +33,27 @@ export const formatDateRange = (
   if (!start && !end) return "";
   if (!start) return end;
   if (!end) return start;
-  return `${start} – ${end}`;
+  return `${start} - ${end}`;
+};
+
+export const formatCalendarDate = (date: string): string => {
+  if (!date) return "";
+
+  const [year, month, day] = date.split("-");
+  const m = Number.parseInt(month, 10);
+  const d = Number.parseInt(day, 10);
+
+  if (!year || Number.isNaN(m) || Number.isNaN(d) || m < 1 || m > 12) {
+    return date;
+  }
+
+  return `${MONTHS[m - 1]} ${d}, ${year}`;
 };
 
 export const parseBullets = (text: string): string[] =>
   text
     .split("\n")
-    .map((s) => s.replace(/^[-•*]\s*/, "").trim())
+    .map((s) => s.replace(/^(?:[-*]|\u2022)\s*/, "").trim())
     .filter(Boolean);
 
 export const parseCommaList = (text: string): string[] =>

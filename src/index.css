@@ -21,8 +21,9 @@ body,
 }
 
 :root {
-  --resume-a4-width: 794px;
-  --resume-a4-height: 1123px;
+  --resume-a4-width: 793.7008px;
+  --resume-a4-height: 1122.5197px;
+  --resume-font-family: "Calibri", "Carlito", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
 .brand-logo {
@@ -60,6 +61,7 @@ body,
   flex: 0 0 var(--resume-a4-width);
   flex-direction: column;
   left: 50%;
+  height: var(--resume-a4-height);
   min-height: var(--resume-a4-height);
   min-width: var(--resume-a4-width);
   overflow: hidden;
@@ -67,6 +69,15 @@ body,
   top: 50%;
   transform-origin: center center;
   width: var(--resume-a4-width);
+}
+
+.resume-fit-scale-layer {
+  transform-origin: top left;
+  width: 100%;
+}
+
+.resume-fit-content {
+  width: 100%;
 }
 
 #preview-panel:fullscreen {
@@ -195,6 +206,11 @@ body,
     visibility: hidden !important;
   }
 
+  #preview-panel {
+    display: block !important;
+    overflow: visible !important;
+  }
+
   /* Show only the resume paper and its children */
   #preview-panel,
   #preview-panel *,
@@ -209,6 +225,8 @@ body,
     left: 0 !important;
     top: 0 !important;
     width: 210mm !important;
+    max-width: 210mm !important;
+    height: 297mm !important;
     min-height: 297mm !important;
     min-width: 210mm !important;
     margin: 0 !important;

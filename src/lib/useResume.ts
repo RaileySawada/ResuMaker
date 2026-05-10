@@ -29,8 +29,8 @@ const normalizeResumeData = (resume: ResumeData): ResumeData => ({
 });
 
 export function useResume() {
-  const [data, setData] = useState<ResumeData>(
-    () => normalizeResumeData(loadFromStorage() ?? createEmptyResume()),
+  const [data, setData] = useState<ResumeData>(() =>
+    normalizeResumeData(loadFromStorage() ?? createEmptyResume()),
   );
 
   useEffect(() => {
