@@ -708,19 +708,6 @@ export default function App() {
             </FormSection>
 
             <FormSection
-              title="Picture"
-              icon={<ImageIcon size={18} />}
-              isOpen={openSection === "picture"}
-              onToggle={() => toggle("picture")}
-              count={data.personal.photo ? 1 : 0}
-            >
-              <PictureForm
-                photo={data.personal.photo}
-                onChange={resume.updatePersonal}
-              />
-            </FormSection>
-
-            <FormSection
               title="Objectives"
               icon={<FileTextIcon size={18} />}
               isOpen={openSection === "summary"}
