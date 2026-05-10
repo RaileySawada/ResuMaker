@@ -17,6 +17,10 @@ import { createEmptyResume } from "./defaultData";
 
 const normalizeResumeData = (resume: ResumeData): ResumeData => ({
   ...resume,
+  personal: {
+    ...resume.personal,
+    photo: resume.personal.photo ?? "",
+  },
   skills: resume.skills.map((skill) =>
     skill.category === "Technical Skills" && !skill.items.trim()
       ? { ...skill, category: "" }

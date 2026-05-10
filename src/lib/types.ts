@@ -1,4 +1,4 @@
-export type TemplateType = "classic" | "modern" | "minimal";
+export type TemplateType = "classic" | "modern" | "minimal" | "cv";
 export type LanguageProficiency =
   | "Native"
   | "Fluent"
@@ -9,6 +9,7 @@ export type LanguageProficiency =
 export interface PersonalInfo {
   fullName: string;
   jobTitle: string;
+  photo: string;
   email: string;
   phone: string;
   location: string;

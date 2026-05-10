@@ -15,6 +15,7 @@ export const createEmptyResume = (): ResumeData => ({
   personal: {
     fullName: "",
     jobTitle: "",
+    photo: "",
     email: "",
     phone: "",
     location: "",

@@ -11,6 +11,7 @@ import type { TemplateType } from "./lib/types";
 
 import FormSection from "./components/FormSection";
 import PersonalInfoForm from "./components/PersonalInfoForm";
+import PictureForm from "./components/PictureForm";
 import SummaryForm from "./components/SummaryForm";
 import ExperienceForm from "./components/ExperienceForm";
 import EducationForm from "./components/EducationForm";
@@ -22,6 +23,7 @@ import ExtrasForm from "./components/ExtrasForm";
 import ClassicTemplate from "./components/templates/ClassicTemplate";
 import ModernTemplate from "./components/templates/ModernTemplate";
 import MinimalTemplate from "./components/templates/MinimalTemplate";
+import CVTemplate from "./components/templates/CVTemplate";
 
 import {
   UserIcon,
@@ -43,12 +45,14 @@ import {
   MoonIcon,
   SunIcon,
   XIcon,
+  ImageIcon,
 } from "./components/Icons";
 
 const TEMPLATES: { id: TemplateType; label: string; accent: string }[] = [
   { id: "classic", label: "Classic", accent: "#dc2626" },
   { id: "modern", label: "Modern", accent: "#111827" },
   { id: "minimal", label: "Minimal", accent: "#111827" },
+  { id: "cv", label: "CV", accent: "#7f1d1d" },
 ];
 
 const A4_WIDTH_PX = 794;
@@ -533,6 +537,8 @@ export default function App() {
         return <ModernTemplate data={data} />;
       case "minimal":
         return <MinimalTemplate data={data} />;
+      case "cv":
+        return <CVTemplate data={data} />;
       default:
         return <ClassicTemplate data={data} />;
     }
@@ -604,6 +610,19 @@ export default function App() {
             >
               <PersonalInfoForm
                 data={data.personal}
+                onChange={resume.updatePersonal}
+              />
+            </FormSection>
+
+            <FormSection
+              title="Picture"
+              icon={<ImageIcon size={18} />}
+              isOpen={openSection === "picture"}
+              onToggle={() => toggle("picture")}
+              count={data.personal.photo ? 1 : 0}
+            >
+              <PictureForm
+                photo={data.personal.photo}
                 onChange={resume.updatePersonal}
               />
             </FormSection>
@@ -847,7 +866,8 @@ export default function App() {
                 id="resume-preview"
                 className="resume-paper"
                 style={{
-                  transform: `translate(-50%, -50%) translate(${previewPan.x}px, ${previewPan.y}px) scale(${previewScale})`,
+                  transform: `translate(-50%, -50%) translate(${Math.round(previewPan.x)}px, ${Math.round(previewPan.y)}px)`,
+                  zoom: previewScale,
                 }}
               >
                 {renderTemplate()}
