@@ -239,3 +239,11 @@ export const SunIcon = (props: IconProps) => (
     <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
   </IconBase>
 );
+
+export const SaveIcon = (props: IconProps) => (
+  <IconBase {...props}>
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+    <polyline points="17 21 17 13 7 13 7 21" />
+    <polyline points="7 3 7 8 15 8" />
+  </IconBase>
+);

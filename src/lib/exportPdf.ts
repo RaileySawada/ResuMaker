@@ -6,9 +6,9 @@
 export const printResume = (name?: string): void => {
   const originalTitle = document.title;
   document.title = name || "Resume";
-  
+
   window.print();
-  
+
   setTimeout(() => {
     document.title = originalTitle;
   }, 1000);

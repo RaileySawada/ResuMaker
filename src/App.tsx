@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useResume } from "./lib/useResume";
 import { printResume } from "./lib/exportPdf";
+import { exportResumeData, importResumeData } from "./lib/dataTransfer";
 import type { TemplateType } from "./lib/types";
 
 import FormSection from "./components/FormSection";
@@ -46,6 +47,8 @@ import {
   SunIcon,
   XIcon,
   ImageIcon,
+  UploadIcon,
+  SaveIcon,
 } from "./components/Icons";
 
 const TEMPLATES: { id: TemplateType; label: string; accent: string }[] = [
@@ -127,7 +130,7 @@ const savePreviewScale = (scale: number) => {
 
 export default function App() {
   const resume = useResume();
-  const { data } = resume;
+  const { data, loadResume } = resume;
   const useStandardTextSizing =
     data.template === "classic" || data.template === "minimal";
 
@@ -285,6 +288,26 @@ export default function App() {
       showToast("PDF Exported successfully");
     } catch {
       showToast("Export failed", "error");
+    }
+  };
+
+  const handleExportData = async () => {
+    try {
+      await exportResumeData(data);
+      showToast("Data exported successfully");
+    } catch {
+      showToast("Export failed", "error");
+    }
+  };
+
+  const handleImportData = async () => {
+    try {
+      const imported = await importResumeData();
+      if (!imported) return;
+      loadResume(imported);
+      showToast("Data imported successfully");
+    } catch {
+      showToast("Import failed — invalid file", "error");
     }
   };
 
@@ -680,6 +703,26 @@ export default function App() {
             </div>
           </div>
 
+          {/* Data Transfer */}
+          <div className="px-6 py-3 border-b border-zinc-200 dark:border-zinc-800/60 flex gap-2">
+            <button
+              onClick={handleExportData}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 text-xs font-bold transition-all active:scale-95"
+              title="Export all resume data as a JSON file"
+            >
+              <SaveIcon size={14} />
+              Export Data
+            </button>
+            <button
+              onClick={handleImportData}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 text-xs font-bold transition-all active:scale-95"
+              title="Import resume data from a JSON file"
+            >
+              <UploadIcon size={14} />
+              Import Data
+            </button>
+          </div>
+
           {/* Form Sections (scrollable) */}
           <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-3 pb-48 lg:pb-12 scrollbar-thin">
             <FormSection
@@ -986,11 +1029,22 @@ export default function App() {
 
           <button
             onClick={toggleTheme}
-            className="flex flex-col items-center gap-1.5 px-4 py-2 rounded-2xl text-zinc-400 transition-all active:scale-95"
+            className="flex flex-col items-center gap-1.5 px-3 py-2 rounded-2xl text-zinc-400 transition-all active:scale-95"
           >
             {isDarkMode ? <SunIcon size={20} /> : <MoonIcon size={20} />}
             <span className="text-[10px] font-bold uppercase tracking-wider">
               Theme
+            </span>
+          </button>
+
+          <button
+            onClick={handleExportData}
+            className="flex flex-col items-center gap-1.5 px-3 py-2 rounded-2xl text-zinc-400 transition-all active:scale-95"
+            title="Export Data"
+          >
+            <SaveIcon size={20} />
+            <span className="text-[10px] font-bold uppercase tracking-wider">
+              Export
             </span>
           </button>
 

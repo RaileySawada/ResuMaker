@@ -279,6 +279,10 @@ export function useResume() {
     setData(createEmptyResume());
   }, []);
 
+  const loadResume = useCallback((imported: ResumeData) => {
+    setData(normalizeResumeData(imported));
+  }, []);
+
   return {
     data,
     setTemplate,
@@ -309,5 +313,6 @@ export function useResume() {
     updateVolunteer,
     removeVolunteer,
     resetResume,
+    loadResume,
   };
 }
