@@ -37,8 +37,8 @@ const styles: Record<string, CSSProperties> = {
     flexDirection: "column",
     padding: "30pt 36pt",
     fontFamily: "'Times New Roman', Georgia, serif",
-    fontSize: "9pt",
-    lineHeight: 1.36,
+    fontSize: "10.5pt",
+    lineHeight: 1.4,
   },
   header: {
     display: "flex",
@@ -67,7 +67,7 @@ const styles: Record<string, CSSProperties> = {
   photoPlaceholder: {
     fontFamily: "'Inter', Arial, sans-serif",
     color: "#9aa3ad",
-    fontSize: "7pt",
+    fontSize: "8pt",
     fontWeight: 700,
     letterSpacing: "1.2px",
     textTransform: "uppercase",
@@ -89,7 +89,7 @@ const styles: Record<string, CSSProperties> = {
   },
   role: {
     color: "#2f3742",
-    fontSize: "10pt",
+    fontSize: "11pt",
     fontStyle: "italic",
     marginBottom: "8pt",
   },
@@ -99,7 +99,7 @@ const styles: Record<string, CSSProperties> = {
     gap: "3pt 14pt",
     color: "#202a36",
     fontFamily: "'Inter', Arial, sans-serif",
-    fontSize: "8pt",
+    fontSize: "9pt",
     fontWeight: 600,
   },
   contactItem: {
@@ -125,7 +125,7 @@ const styles: Record<string, CSSProperties> = {
     borderBottom: `0.75pt solid ${RULE}`,
     color: INK,
     fontFamily: "'Inter', Arial, sans-serif",
-    fontSize: "7.8pt",
+    fontSize: "9pt",
     fontWeight: 800,
     letterSpacing: "1.4px",
     marginBottom: "5pt",
@@ -140,12 +140,12 @@ const styles: Record<string, CSSProperties> = {
   },
   entryTitle: {
     color: "#111827",
-    fontSize: "9.2pt",
+    fontSize: "10.5pt",
     fontWeight: 700,
   },
   entryMeta: {
     color: "#3f4a56",
-    fontSize: "8pt",
+    fontSize: "9.5pt",
     fontStyle: "italic",
     marginTop: "1pt",
   },
@@ -153,13 +153,13 @@ const styles: Record<string, CSSProperties> = {
     color: MUTED,
     flexShrink: 0,
     fontFamily: "'Inter', Arial, sans-serif",
-    fontSize: "7.2pt",
+    fontSize: "8.5pt",
     fontWeight: 600,
     whiteSpace: "nowrap",
   },
   paragraph: {
     color: "#303947",
-    fontSize: "8.8pt",
+    fontSize: "10.5pt",
     lineHeight: 1.45,
     margin: 0,
   },
@@ -167,7 +167,7 @@ const styles: Record<string, CSSProperties> = {
     display: "flex",
     gap: "5pt",
     color: "#303947",
-    fontSize: "8.3pt",
+    fontSize: "10pt",
     lineHeight: 1.38,
     marginTop: "2pt",
   },
@@ -177,7 +177,7 @@ const styles: Record<string, CSSProperties> = {
   },
   smallText: {
     color: "#303947",
-    fontSize: "8.1pt",
+    fontSize: "9.5pt",
     lineHeight: 1.35,
   },
 };
@@ -295,7 +295,7 @@ export default function CVTemplate({ data }: Props) {
                 .map((skill) => (
                   <div key={skill.id} style={{ marginBottom: "5pt" }}>
                     {skill.category && (
-                      <div style={{ ...styles.entryTitle, fontSize: "8pt" }}>
+                      <div style={{ ...styles.entryTitle, fontSize: "9.5pt" }}>
                         {skill.category}
                       </div>
                     )}
@@ -331,7 +331,7 @@ export default function CVTemplate({ data }: Props) {
             <Section title="Certifications" compact>
               {certifications.map((certification) => (
                 <div key={certification.id} style={{ marginBottom: "5pt" }}>
-                  <div style={{ ...styles.entryTitle, fontSize: "8pt" }}>
+                  <div style={{ ...styles.entryTitle, fontSize: "9.5pt" }}>
                     {certification.name}
                   </div>
                   <div style={styles.smallText}>
