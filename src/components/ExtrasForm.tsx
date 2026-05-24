@@ -107,7 +107,7 @@ export default function ExtrasForm(props: Props) {
                 onChange={(e) =>
                   props.onUpdateLanguage(l.id, { name: e.target.value })
                 }
-                placeholder="e.g. Spanish"
+                placeholder="e.g. English"
                 className="min-w-0 flex-1 bg-transparent px-2 py-1 text-[13px] font-bold text-zinc-800 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none"
               />
               <select
@@ -168,14 +168,14 @@ export default function ExtrasForm(props: Props) {
                     label="Award Title"
                     value={a.title}
                     onChange={(v) => props.onUpdateAward(a.id, { title: v })}
-                    placeholder="Dean's List"
+                    placeholder="Employee of the Month"
                   />
                 </div>
                 <InputField
                   label="Issuer"
                   value={a.issuer}
                   onChange={(v) => props.onUpdateAward(a.id, { issuer: v })}
-                  placeholder="UC Berkeley"
+                  placeholder="Company, school, or organization"
                 />
                 <InputField
                   label="Date"
@@ -190,7 +190,7 @@ export default function ExtrasForm(props: Props) {
                     onChange={(v) =>
                       props.onUpdateAward(a.id, { description: v })
                     }
-                    placeholder="Brief description"
+                    placeholder="What did you receive it for?"
                   />
                 </div>
               </div>
@@ -257,7 +257,7 @@ export default function ExtrasForm(props: Props) {
                       onChange={(val) =>
                         props.onUpdateVolunteer(v.id, { organization: val })
                       }
-                      placeholder="Red Cross"
+                      placeholder="Local community group"
                     />
                     <InputField
                       label="Role"
@@ -265,7 +265,7 @@ export default function ExtrasForm(props: Props) {
                       onChange={(val) =>
                         props.onUpdateVolunteer(v.id, { role: val })
                       }
-                      placeholder="Event Coordinator"
+                      placeholder="Volunteer Assistant"
                     />
                     <InputField
                       label="Start Date"
@@ -325,7 +325,7 @@ export default function ExtrasForm(props: Props) {
                         })
                       }
                       rows={3}
-                      placeholder="Organized fundraising events for 200+ attendees..."
+                      placeholder="Helped prepare materials, welcome guests, and keep the activity organized."
                       className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm resize-none"
                     />
                   </div>

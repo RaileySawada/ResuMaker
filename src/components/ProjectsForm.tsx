@@ -88,15 +88,15 @@ function ProjectCard({
                 label="Project Name *"
                 value={project.name}
                 onChange={(v) => onUpdate({ name: v })}
-                placeholder="Personal Finance Tracker"
+                placeholder="Community Clean-Up Drive"
               />
             </div>
             <div className="col-span-2">
               <InputField
-                label="Technologies Used"
+                label="Tools / Skills Used"
                 value={project.technologies}
                 onChange={(v) => onUpdate({ technologies: v })}
-                placeholder="React, Node.js, PostgreSQL, AWS"
+                placeholder="Planning, Budgeting, Social Media"
               />
             </div>
             <InputField
@@ -115,13 +115,13 @@ function ProjectCard({
               label="Live URL"
               value={project.liveUrl}
               onChange={(v) => onUpdate({ liveUrl: v })}
-              placeholder="https://myproject.com"
+              placeholder="Link to project or page"
             />
             <InputField
-              label="Repository URL"
+              label="Extra Link"
               value={project.repoUrl}
               onChange={(v) => onUpdate({ repoUrl: v })}
-              placeholder="https://github.com/..."
+              placeholder="Optional supporting link"
             />
           </div>
 
@@ -137,7 +137,7 @@ function ProjectCard({
               onChange={(e) => onUpdate({ description: e.target.value })}
               rows={4}
               placeholder={
-                "Developed a full-stack app to track personal budgets across multiple accounts\nImplemented real-time notifications using WebSockets\nDeployed on AWS with CI/CD pipeline via GitHub Actions"
+                "Coordinated volunteers and prepared the activity schedule\nCreated simple posters and shared updates online\nHelped collect supplies and report the final results"
               }
               className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm resize-none"
             />
@@ -157,8 +157,8 @@ export default function ProjectsForm({
   return (
     <div className="space-y-4">
       <p className="text-[12px] text-zinc-500 dark:text-zinc-400 leading-relaxed px-1">
-        Showcase personal, academic, or open-source projects. Especially
-        valuable for fresh graduates.
+        Showcase school work, community activities, freelance work, or personal
+        projects. This is helpful when you have limited job experience.
       </p>
 
       {items.length === 0 && (

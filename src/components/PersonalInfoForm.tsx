@@ -63,7 +63,7 @@ export default function PersonalInfoForm({ data, onChange }: Props) {
             label="Job Title / Desired Role"
             value={data.jobTitle}
             onChange={(v) => onChange("jobTitle", v)}
-            placeholder="Software Engineer"
+            placeholder="Customer Service Associate"
           />
         </div>
         <Field
@@ -85,7 +85,7 @@ export default function PersonalInfoForm({ data, onChange }: Props) {
             label="Location"
             value={data.location}
             onChange={(v) => onChange("location", v)}
-            placeholder="San Francisco, CA"
+            placeholder="Quezon City, Philippines"
           />
         </div>
         <Field
@@ -116,20 +116,20 @@ export default function PersonalInfoForm({ data, onChange }: Props) {
           label="LinkedIn URL"
           value={data.linkedin}
           onChange={(v) => onChange("linkedin", v)}
-          placeholder="linkedin.com/in/janedoe"
+          placeholder="linkedin.com/in/yourname"
         />
         <Field
-          label="GitHub URL"
+          label="Professional Profile"
           value={data.github}
           onChange={(v) => onChange("github", v)}
-          placeholder="github.com/janedoe"
+          placeholder="Online profile or work sample link"
         />
         <div className="col-span-2">
           <Field
             label="Portfolio / Website"
             value={data.website}
             onChange={(v) => onChange("website", v)}
-            placeholder="janedoe.dev"
+            placeholder="yourname.com or online portfolio"
           />
         </div>
       </div>

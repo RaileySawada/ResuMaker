@@ -104,7 +104,7 @@ function EducationCard({
                 label="Institution / University"
                 value={edu.institution}
                 onChange={(v) => onUpdate({ institution: v })}
-                placeholder="University of California, Berkeley"
+                placeholder="Name of your school"
                 required
               />
             </div>
@@ -112,19 +112,19 @@ function EducationCard({
               label="Degree"
               value={edu.degree}
               onChange={(v) => onUpdate({ degree: v })}
-              placeholder="Bachelor of Science"
+              placeholder="Bachelor's Degree"
             />
             <InputField
               label="Field of Study"
               value={edu.fieldOfStudy}
               onChange={(v) => onUpdate({ fieldOfStudy: v })}
-              placeholder="Computer Science"
+              placeholder="Business Administration"
             />
             <InputField
               label="Location"
               value={edu.location}
               onChange={(v) => onUpdate({ location: v })}
-              placeholder="Berkeley, CA"
+              placeholder="Manila, Philippines"
             />
             <InputField
               label="GPA"
@@ -176,7 +176,7 @@ function EducationCard({
               onChange={(e) => onUpdate({ achievements: e.target.value })}
               rows={3}
               placeholder={
-                "Dean's List (2021–2023)\nRelevant Courses: Data Structures, Algorithms, Machine Learning"
+                "Dean's List, 2022\nCompleted leadership training\nMember of the student council"
               }
               className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm resize-none"
             />

@@ -101,21 +101,21 @@ function ExperienceCard({
               label="Company"
               value={exp.company}
               onChange={(v) => onUpdate({ company: v })}
-              placeholder="Acme Corp"
+              placeholder="Brightway Services"
               required
             />
             <InputField
               label="Title"
               value={exp.position}
               onChange={(v) => onUpdate({ position: v })}
-              placeholder="Software Engineer"
+              placeholder="Team Member"
               required
             />
             <InputField
               label="Location"
               value={exp.location}
               onChange={(v) => onUpdate({ location: v })}
-              placeholder="Remote / New York, NY"
+              placeholder="Makati City or Remote"
             />
             <div />
             <InputField
@@ -157,7 +157,7 @@ function ExperienceCard({
             <label className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1.5">
               Responsibilities & Achievements
               <span className="text-zinc-600 ml-1 font-medium lowercase tracking-normal">
-                (one per line, use action verbs)
+                (one per line)
               </span>
             </label>
             <textarea
@@ -165,7 +165,7 @@ function ExperienceCard({
               onChange={(e) => onUpdate({ description: e.target.value })}
               rows={5}
               placeholder={
-                "Built RESTful APIs serving 50K+ daily users\nReduced page load time by 40% through code optimization\nMentored 2 junior developers and conducted code reviews"
+                "Assisted customers with questions and daily requests\nKept records organized and updated at the end of each shift\nWorked with the team to finish tasks on time during busy hours"
               }
               className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm resize-none"
             />

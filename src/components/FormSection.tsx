@@ -19,19 +19,19 @@ export default function FormSection({
   count,
 }: FormSectionProps) {
   return (
-    <div className="rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800/50 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm transition-all duration-300">
+    <div className="form-section-card rounded-2xl overflow-hidden border border-white/70 dark:border-white/10 bg-white/70 dark:bg-zinc-900/55 backdrop-blur-sm transition-all duration-300 shadow-sm">
       <button
         onClick={onToggle}
-        className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 transition-colors group"
+        className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-white/70 dark:hover:bg-white/[0.04] transition-colors group"
       >
-        <span className="text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
+        <span className="flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100 transition-colors group-hover:bg-cyan-100 dark:bg-cyan-400/10 dark:text-cyan-200 dark:ring-cyan-300/10">
           {icon}
         </span>
         <span className="flex-1 text-[13px] font-bold text-zinc-800 dark:text-zinc-200 tracking-widest uppercase">
           {title}
         </span>
         {count !== undefined && count > 0 && (
-          <span className="text-[10px] bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 px-2 py-0.5 rounded-full font-bold">
+          <span className="text-[10px] bg-amber-50 dark:bg-amber-400/10 border border-amber-100 dark:border-amber-300/10 text-amber-700 dark:text-amber-200 px-2 py-0.5 rounded-full font-bold">
             {count}
           </span>
         )}
@@ -41,11 +41,11 @@ export default function FormSection({
       </button>
 
       <div
-        className={`transition-all duration-300 ease-in-out overflow-hidden ${
+        className={`transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden ${
           isOpen ? "max-h-[9999px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="px-5 pb-5 pt-2 border-t border-zinc-200 dark:border-zinc-800/50 space-y-4">
+        <div className="section-content px-5 pb-5 pt-3 border-t border-zinc-200/70 dark:border-white/10 space-y-4">
           {children}
         </div>
       </div>

@@ -86,7 +86,7 @@ function CertCard({
                 label="Certification Name *"
                 value={cert.name}
                 onChange={(v) => onUpdate({ name: v })}
-                placeholder="AWS Certified Solutions Architect"
+                placeholder="Customer Service Training"
               />
             </div>
             <div className="col-span-2">
@@ -94,7 +94,7 @@ function CertCard({
                 label="Issuing Organization *"
                 value={cert.issuer}
                 onChange={(v) => onUpdate({ issuer: v })}
-                placeholder="Amazon Web Services"
+                placeholder="Training center or organization"
               />
             </div>
             <InputField
@@ -114,7 +114,7 @@ function CertCard({
                 label="Credential URL"
                 value={cert.credentialUrl}
                 onChange={(v) => onUpdate({ credentialUrl: v })}
-                placeholder="https://www.credly.com/..."
+                placeholder="Optional certificate link"
               />
             </div>
           </div>

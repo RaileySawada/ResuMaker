@@ -3,6 +3,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { useResume } from "./lib/useResume";
@@ -53,9 +54,9 @@ import {
 
 const TEMPLATES: { id: TemplateType; label: string; accent: string }[] = [
   { id: "classic", label: "Classic", accent: "#dc2626" },
-  { id: "modern", label: "Modern", accent: "#111827" },
-  { id: "minimal", label: "Minimal", accent: "#111827" },
-  { id: "cv", label: "CV", accent: "#7f1d1d" },
+  { id: "modern", label: "Modern", accent: "#0891b2" },
+  { id: "minimal", label: "Minimal", accent: "#52525b" },
+  { id: "cv", label: "CV", accent: "#b45309" },
 ];
 
 const A4_WIDTH_PX = 793.7008; // 210mm at 96 CSS DPI
@@ -131,6 +132,7 @@ const savePreviewScale = (scale: number) => {
 export default function App() {
   const resume = useResume();
   const { data, loadResume } = resume;
+  const isCvTemplate = data.template === "cv";
   const useStandardTextSizing =
     data.template === "classic" || data.template === "minimal";
 
@@ -156,6 +158,12 @@ export default function App() {
 
   const toggle = (key: string) =>
     setOpenSection((prev) => (prev === key ? null : key));
+
+  useEffect(() => {
+    if (!isCvTemplate && openSection === "picture") {
+      setOpenSection("personal");
+    }
+  }, [isCvTemplate, openSection]);
 
   const [view, setView] = useState<"edit" | "preview">("edit");
   const [toast, setToast] = useState<{
@@ -655,46 +663,48 @@ export default function App() {
 
   return (
     <div className={`${isDarkMode ? "dark" : ""} h-full`}>
-      <div className="flex h-full min-h-full bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-200 overflow-hidden font-sans selection:bg-zinc-900/15 dark:selection:bg-white/20 flex-col lg:flex-row relative">
+      <div className="app-shell flex h-full min-h-full text-zinc-900 dark:text-zinc-200 overflow-hidden font-sans selection:bg-cyan-900/15 dark:selection:bg-cyan-300/20 flex-col lg:flex-row relative">
         {/* ── Left Panel: Editor ── */}
         <aside
-          className={`w-full lg:w-[400px] lg:flex-none lg:flex-shrink-0 flex-1 min-h-0 flex flex-col border-r border-zinc-200 dark:border-zinc-800/60 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl relative z-20 shadow-2xl print:hidden ${view === "edit" ? "flex" : "hidden lg:flex"}`}
+          className={`editor-panel w-full lg:w-[430px] lg:flex-none lg:flex-shrink-0 flex-1 min-h-0 flex flex-col border-r border-white/70 dark:border-white/10 bg-white/88 dark:bg-zinc-950/82 backdrop-blur-2xl relative z-20 shadow-2xl print:hidden ${view === "edit" ? "flex panel-enter" : "hidden lg:flex"}`}
         >
           {/* Header */}
-          <div className="px-6 py-5 border-b border-zinc-200 dark:border-zinc-800/60 bg-gradient-to-b from-zinc-100/50 dark:from-zinc-900/50 to-transparent">
+          <div className="relative overflow-hidden px-5 py-5 sm:px-6 border-b border-white/70 dark:border-white/10">
+            <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(8,145,178,0.14),rgba(245,158,11,0.10)_45%,rgba(255,255,255,0)_80%)] dark:bg-[linear-gradient(135deg,rgba(34,211,238,0.13),rgba(245,158,11,0.10)_45%,rgba(9,9,11,0)_80%)]" />
             <div className="flex items-center gap-3">
               <img
                 src="/images/logo.png"
                 alt=""
-                className="brand-logo -my-4 -ml-3 h-16 w-16 flex-none object-contain"
+                className="brand-logo relative -my-4 -ml-3 h-16 w-16 flex-none object-contain drop-shadow-sm"
               />
-              <div className="-ml-1 min-w-0 leading-tight">
+              <div className="relative -ml-1 min-w-0 leading-tight">
                 <h1 className="text-2xl font-black tracking-tight text-zinc-950 dark:text-white">
                   Resumakr
                 </h1>
                 <p className="mt-0.5 text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
-                  Build your resume live.
+                  Build a resume that feels like you.
                 </p>
               </div>
             </div>
           </div>
 
           {/* Template Picker */}
-          <div className="px-6 py-4 border-b border-zinc-200 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/20">
+          <div className="px-5 py-4 sm:px-6 border-b border-white/70 dark:border-white/10 bg-white/45 dark:bg-white/[0.03]">
             <div className="flex items-center justify-between mb-3">
               <p className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
                 Template
               </p>
             </div>
-            <div className="flex gap-2 bg-zinc-100/50 dark:bg-zinc-900/50 p-1 rounded-xl border border-zinc-200 dark:border-zinc-800/50">
+            <div className="grid grid-cols-4 gap-2">
               {TEMPLATES.map((t) => (
                 <button
                   key={t.id}
                   onClick={() => resume.setTemplate(t.id)}
-                  className={`flex-1 py-2 rounded-lg text-[13px] font-semibold transition-all duration-200 ${
+                  style={{ "--template-accent": t.accent } as CSSProperties}
+                  className={`template-card py-3 rounded-xl text-[12px] font-extrabold transition-all duration-300 ${
                     data.template === t.id
-                      ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm ring-1 ring-zinc-200 dark:ring-zinc-700"
-                      : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50"
+                      ? "is-active text-zinc-950 dark:text-white shadow-lg"
+                      : "text-zinc-500 hover:-translate-y-0.5 hover:text-zinc-800 dark:hover:text-zinc-100"
                   }`}
                 >
                   {t.label}
@@ -704,10 +714,10 @@ export default function App() {
           </div>
 
           {/* Data Transfer */}
-          <div className="px-6 py-3 border-b border-zinc-200 dark:border-zinc-800/60 flex gap-2">
+          <div className="px-5 py-3 sm:px-6 border-b border-white/70 dark:border-white/10 flex gap-2 bg-white/35 dark:bg-white/[0.02]">
             <button
               onClick={handleExportData}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 text-xs font-bold transition-all active:scale-95"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-white/75 dark:bg-zinc-900/80 hover:bg-cyan-50 dark:hover:bg-cyan-500/10 hover:text-cyan-700 dark:hover:text-cyan-200 text-zinc-600 dark:text-zinc-300 text-xs font-bold transition-all active:scale-95 shadow-sm ring-1 ring-zinc-200/70 dark:ring-white/10"
               title="Export all resume data as a JSON file"
             >
               <SaveIcon size={14} />
@@ -715,16 +725,24 @@ export default function App() {
             </button>
             <button
               onClick={handleImportData}
-              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 text-xs font-bold transition-all active:scale-95"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-white/75 dark:bg-zinc-900/80 hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:text-amber-700 dark:hover:text-amber-200 text-zinc-600 dark:text-zinc-300 text-xs font-bold transition-all active:scale-95 shadow-sm ring-1 ring-zinc-200/70 dark:ring-white/10"
               title="Import resume data from a JSON file"
             >
               <UploadIcon size={14} />
               Import Data
             </button>
+            <button
+              onClick={handleReset}
+              className="lg:hidden flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-white/75 dark:bg-zinc-900/80 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-300 text-zinc-500 dark:text-zinc-300 text-xs font-bold transition-all active:scale-95 shadow-sm ring-1 ring-zinc-200/70 dark:ring-white/10"
+              title="Reset resume"
+            >
+              <RefreshCwIcon size={14} />
+              Reset
+            </button>
           </div>
 
           {/* Form Sections (scrollable) */}
-          <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-3 pb-48 lg:pb-12 scrollbar-thin">
+          <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-3 pb-44 lg:pb-12 scrollbar-thin">
             <FormSection
               title="Personal Info"
               icon={<UserIcon size={18} />}
@@ -737,18 +755,20 @@ export default function App() {
               />
             </FormSection>
 
-            <FormSection
-              title="Picture"
-              icon={<ImageIcon size={18} />}
-              isOpen={openSection === "picture"}
-              onToggle={() => toggle("picture")}
-              count={data.personal.photo ? 1 : 0}
-            >
-              <PictureForm
-                photo={data.personal.photo}
-                onChange={resume.updatePersonal}
-              />
-            </FormSection>
+            {isCvTemplate && (
+              <FormSection
+                title="Picture"
+                icon={<ImageIcon size={18} />}
+                isOpen={openSection === "picture"}
+                onToggle={() => toggle("picture")}
+                count={data.personal.photo ? 1 : 0}
+              >
+                <PictureForm
+                  photo={data.personal.photo}
+                  onChange={resume.updatePersonal}
+                />
+              </FormSection>
+            )}
 
             <FormSection
               title="Objectives"
@@ -866,11 +886,11 @@ export default function App() {
           </div>
 
           {/* Footer Actions */}
-          <div className="hidden lg:flex px-5 py-4 border-t border-zinc-200 dark:border-zinc-800/60 bg-zinc-50 dark:bg-zinc-950 gap-3 relative">
-            <div className="absolute inset-0 bg-gradient-to-t from-zinc-500/5 to-transparent pointer-events-none" />
+          <div className="hidden lg:flex px-5 py-4 border-t border-white/70 dark:border-white/10 bg-white/55 dark:bg-zinc-950/70 gap-3 relative">
+            <div className="absolute inset-0 bg-gradient-to-t from-cyan-500/5 to-transparent pointer-events-none" />
             <button
               onClick={handlePrint}
-              className="flex-1 flex items-center justify-center gap-2 bg-zinc-950 hover:bg-zinc-800 active:scale-[0.98] text-white text-[13px] font-bold py-3 rounded-xl transition-all shadow-lg shadow-zinc-900/20 ring-1 ring-zinc-900/10 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200 dark:ring-white/10"
+              className="flex-1 flex items-center justify-center gap-2 bg-zinc-950 hover:bg-cyan-950 active:scale-[0.98] text-white text-[13px] font-bold py-3 rounded-xl transition-all shadow-lg shadow-cyan-950/20 ring-1 ring-zinc-900/10 dark:bg-white dark:text-zinc-950 dark:hover:bg-cyan-100 dark:ring-white/10"
             >
               <DownloadIcon size={16} />
               Export PDF
@@ -878,7 +898,7 @@ export default function App() {
             <button
               onClick={toggleTheme}
               title="Toggle theme"
-              className="w-12 flex items-center justify-center bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:scale-[0.98] border border-zinc-200 dark:border-zinc-800 rounded-xl text-zinc-500 transition-all"
+              className="w-12 flex items-center justify-center bg-white dark:bg-zinc-900 hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:text-amber-600 dark:hover:text-amber-200 active:scale-[0.98] border border-zinc-200 dark:border-zinc-800 rounded-xl text-zinc-500 transition-all"
             >
               {isDarkMode ? <SunIcon size={16} /> : <MoonIcon size={16} />}
             </button>
@@ -895,10 +915,10 @@ export default function App() {
         {/* ── Right Panel: Live Preview ── */}
         <main
           ref={previewPanelRef}
-          className={`flex-1 overflow-hidden bg-zinc-100 dark:bg-zinc-900/50 flex flex-col relative scrollbar-thin ${view === "preview" ? "flex" : "hidden lg:flex"}`}
+          className={`preview-panel flex-1 overflow-hidden flex flex-col relative scrollbar-thin ${view === "preview" ? "flex panel-enter" : "hidden lg:flex"}`}
           id="preview-panel"
         >
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-200/50 via-zinc-100 to-zinc-50 dark:from-zinc-800/20 dark:via-zinc-900/50 dark:to-zinc-950/80 pointer-events-none print:hidden" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(8,145,178,0.18),transparent_34%),radial-gradient(circle_at_78%_22%,rgba(245,158,11,0.15),transparent_30%),linear-gradient(135deg,#f8fafc,#eef2f7_52%,#f7f7f8)] dark:bg-[radial-gradient(circle_at_25%_20%,rgba(34,211,238,0.13),transparent_34%),radial-gradient(circle_at_78%_22%,rgba(245,158,11,0.11),transparent_30%),linear-gradient(135deg,#09090b,#111827_55%,#18181b)] pointer-events-none print:hidden" />
 
           <button
             onClick={togglePreviewFullscreen}
@@ -1013,69 +1033,62 @@ export default function App() {
         </main>
 
         {/* Mobile Navigation */}
-        <div
-          className="lg:hidden fixed bottom-0 left-0 right-0 h-20 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-2xl border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-around z-50 print:hidden"
-          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-        >
+        <div className="mobile-dock lg:hidden fixed bottom-0 left-0 right-0 z-50 px-3 pb-3 pt-2 print:hidden">
+          <div
+            className="mx-auto grid max-w-[520px] grid-cols-[1fr_1fr_72px_1fr_1fr] items-end gap-1 rounded-[1.35rem] border border-white/75 bg-white/82 p-2 shadow-[0_20px_50px_-18px_rgba(15,23,42,0.45)] backdrop-blur-2xl dark:border-white/10 dark:bg-zinc-950/82 dark:shadow-black/40"
+            style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
+          >
           <button
             onClick={() => setView("edit")}
-            className={`flex flex-col items-center gap-1.5 px-4 py-2 rounded-2xl transition-all ${view === "edit" ? "text-zinc-950 dark:text-white bg-zinc-100 dark:bg-zinc-800" : "text-zinc-400"}`}
+            className={`mobile-dock-button ${view === "edit" ? "is-active" : ""}`}
           >
             <FileTextIcon size={20} />
-            <span className="text-[10px] font-bold uppercase tracking-wider">
+            <span className="text-[10px] font-bold uppercase">
               Edit
             </span>
           </button>
 
           <button
             onClick={toggleTheme}
-            className="flex flex-col items-center gap-1.5 px-3 py-2 rounded-2xl text-zinc-400 transition-all active:scale-95"
+            className="mobile-dock-button"
           >
             {isDarkMode ? <SunIcon size={20} /> : <MoonIcon size={20} />}
-            <span className="text-[10px] font-bold uppercase tracking-wider">
+            <span className="text-[10px] font-bold uppercase">
               Theme
-            </span>
-          </button>
-
-          <button
-            onClick={handleExportData}
-            className="flex flex-col items-center gap-1.5 px-3 py-2 rounded-2xl text-zinc-400 transition-all active:scale-95"
-            title="Export Data"
-          >
-            <SaveIcon size={20} />
-            <span className="text-[10px] font-bold uppercase tracking-wider">
-              Export
             </span>
           </button>
 
           <div className="relative -top-6">
             <button
               onClick={handlePrint}
-              className="w-14 h-14 rounded-full bg-zinc-950 text-white flex items-center justify-center shadow-xl shadow-zinc-900/30 active:scale-90 transition-all border-4 border-white dark:bg-white dark:text-zinc-950 dark:border-zinc-950"
+              className="mobile-export-button"
+              title="Export PDF"
             >
               <DownloadIcon size={24} />
             </button>
           </div>
 
           <button
-            onClick={handleReset}
-            className="flex flex-col items-center gap-1.5 px-4 py-2 rounded-2xl text-zinc-400 hover:text-red-500 transition-all active:scale-95"
+            onClick={handleExportData}
+            className="mobile-dock-button"
+            title="Export Data"
           >
-            <RefreshCwIcon size={20} />
-            <span className="text-[10px] font-bold uppercase tracking-wider">
-              Reset
+            <SaveIcon size={20} />
+            <span className="text-[10px] font-bold uppercase">
+              Data
             </span>
           </button>
 
           <button
             onClick={() => setView("preview")}
-            className={`flex flex-col items-center gap-1.5 px-4 py-2 rounded-2xl transition-all ${view === "preview" ? "text-zinc-950 dark:text-white bg-zinc-100 dark:bg-zinc-800" : "text-zinc-400"}`}
+            className={`mobile-dock-button ${view === "preview" ? "is-active" : ""}`}
           >
             <SparklesIcon size={20} />
-            <span className="text-[10px] font-bold uppercase tracking-wider">
+            <span className="text-[10px] font-bold uppercase">
               Preview
             </span>
           </button>
+          </div>
         </div>
 
         {/* Toast Notification */}
