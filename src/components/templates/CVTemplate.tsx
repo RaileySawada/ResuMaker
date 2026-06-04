@@ -222,9 +222,18 @@ export default function CVTemplate({ data }: Props) {
   } = data;
 
   const contacts = [
-    p.email && { icon: <MailIcon size={11} strokeWidth={2.4} />, value: p.email },
-    p.phone && { icon: <PhoneIcon size={11} strokeWidth={2.4} />, value: p.phone },
-    p.location && { icon: <MapPinIcon size={11} strokeWidth={2.4} />, value: p.location },
+    p.email && {
+      icon: <MailIcon size={11} strokeWidth={2.4} />,
+      value: p.email,
+    },
+    p.phone && {
+      icon: <PhoneIcon size={11} strokeWidth={2.4} />,
+      value: p.phone,
+    },
+    p.location && {
+      icon: <MapPinIcon size={11} strokeWidth={2.4} />,
+      value: p.location,
+    },
     p.linkedin && {
       icon: <LinkedinIcon size={11} strokeWidth={2.4} />,
       value: cleanUrl(p.linkedin),
@@ -275,7 +284,9 @@ export default function CVTemplate({ data }: Props) {
                 <div key={edu.id} style={{ marginBottom: "7pt" }}>
                   <div style={styles.entryTitle}>{edu.institution}</div>
                   <div style={styles.entryMeta}>
-                    {[edu.degree, edu.fieldOfStudy].filter(Boolean).join(" in ")}
+                    {[edu.degree, edu.fieldOfStudy]
+                      .filter(Boolean)
+                      .join(" in ")}
                   </div>
                   <div style={styles.smallText}>
                     {formatDateRange(edu.startDate, edu.endDate, edu.isCurrent)}
@@ -348,19 +359,23 @@ export default function CVTemplate({ data }: Props) {
 
         <main style={styles.main}>
           {summary && (
-            <Section title="Professional Profile">
+            <Section title="Profile">
               <p style={styles.paragraph}>{summary}</p>
             </Section>
           )}
 
           {experience.length > 0 && (
-            <Section title="Professional Experience">
+            <Section title="Experience">
               {experience.map((exp) => (
                 <div key={exp.id} style={{ marginBottom: "8pt" }}>
                   <div style={styles.entryHeader}>
                     <div style={styles.entryTitle}>{exp.position}</div>
                     <div style={styles.date}>
-                      {formatDateRange(exp.startDate, exp.endDate, exp.isCurrent)}
+                      {formatDateRange(
+                        exp.startDate,
+                        exp.endDate,
+                        exp.isCurrent,
+                      )}
                     </div>
                   </div>
                   <div style={styles.entryMeta}>
@@ -373,14 +388,18 @@ export default function CVTemplate({ data }: Props) {
           )}
 
           {projects.length > 0 && (
-            <Section title="Selected Projects">
+            <Section title="Selected Project(s)">
               {projects.map((project) => (
                 <div key={project.id} style={{ marginBottom: "7pt" }}>
                   <div style={styles.entryHeader}>
                     <div style={styles.entryTitle}>{project.name}</div>
                     {(project.startDate || project.endDate) && (
                       <div style={styles.date}>
-                        {formatDateRange(project.startDate, project.endDate, false)}
+                        {formatDateRange(
+                          project.startDate,
+                          project.endDate,
+                          false,
+                        )}
                       </div>
                     )}
                   </div>
@@ -406,7 +425,9 @@ export default function CVTemplate({ data }: Props) {
                     )}
                   </div>
                   <div style={styles.smallText}>
-                    {[award.issuer, award.description].filter(Boolean).join(" | ")}
+                    {[award.issuer, award.description]
+                      .filter(Boolean)
+                      .join(" | ")}
                   </div>
                 </div>
               ))}
@@ -420,7 +441,11 @@ export default function CVTemplate({ data }: Props) {
                   <div style={styles.entryHeader}>
                     <div style={styles.entryTitle}>{item.role}</div>
                     <div style={styles.date}>
-                      {formatDateRange(item.startDate, item.endDate, item.isCurrent)}
+                      {formatDateRange(
+                        item.startDate,
+                        item.endDate,
+                        item.isCurrent,
+                      )}
                     </div>
                   </div>
                   <div style={styles.entryMeta}>{item.organization}</div>
