@@ -330,7 +330,7 @@ export default function ModernTemplate({ data }: Props) {
       >
         {/* Summary */}
         {summary && (
-          <MainSection title="Objectives">
+          <MainSection title="Professional Summary">
             <p
               style={{
                 fontSize: "9.5pt",

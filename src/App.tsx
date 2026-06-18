@@ -9,7 +9,8 @@ import {
 import { useResume } from "./lib/useResume";
 import { printResume } from "./lib/exportPdf";
 import { exportResumeData, importResumeData } from "./lib/dataTransfer";
-import type { TemplateType } from "./lib/types";
+import type { ResumeSectionId, TemplateType } from "./lib/types";
+import { DEFAULT_SECTION_ORDER } from "./lib/defaultData";
 
 import FormSection from "./components/FormSection";
 import PersonalInfoForm from "./components/PersonalInfoForm";
@@ -61,7 +62,7 @@ const TEMPLATES: { id: TemplateType; label: string; accent: string }[] = [
 
 const A4_WIDTH_PX = 793.7008; // 210mm at 96 CSS DPI
 const A4_HEIGHT_PX = 1122.5197; // 297mm at 96 CSS DPI
-const RESUME_CONTENT_MIN_SCALE = 0.1;
+const RESUME_CONTENT_MIN_SCALE = 0.82;
 const PREVIEW_MIN_SCALE = 0.2;
 const PREVIEW_MAX_SCALE = 2;
 const PREVIEW_SCALE_STEP = 0.1;
@@ -133,9 +134,7 @@ export default function App() {
   const resume = useResume();
   const { data, loadResume } = resume;
   const isCvTemplate = data.template === "cv";
-  const useStandardTextSizing =
-    data.template === "classic" || data.template === "minimal";
-
+  const useStandardTextSizing = data.template === "minimal";
   const [openSection, setOpenSection] = useState<string | null>("personal");
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
@@ -159,12 +158,6 @@ export default function App() {
   const toggle = (key: string) =>
     setOpenSection((prev) => (prev === key ? null : key));
 
-  useEffect(() => {
-    if (!isCvTemplate && openSection === "picture") {
-      setOpenSection("personal");
-    }
-  }, [isCvTemplate, openSection]);
-
   const [view, setView] = useState<"edit" | "preview">("edit");
   const [toast, setToast] = useState<{
     message: string;
@@ -178,7 +171,6 @@ export default function App() {
   );
   const [resumeContentScale, setResumeContentScale] = useState(1);
   const [previewPan, setPreviewPan] = useState<PreviewPoint>({ x: 0, y: 0 });
-  const [isPanMode, setIsPanMode] = useState(false);
   const [isDraggingPreview, setIsDraggingPreview] = useState(false);
   const previewPanelRef = useRef<HTMLElement | null>(null);
   const previewViewportRef = useRef<HTMLDivElement | null>(null);
@@ -550,12 +542,10 @@ export default function App() {
       return;
     }
 
-    if (event.pointerType === "touch" || isPanMode) {
-      gesture.mode = "pan";
-      gesture.startPoint = point;
-      gesture.startPan = previewPanRef.current;
-      setIsDraggingPreview(true);
-    }
+    gesture.mode = "pan";
+    gesture.startPoint = point;
+    gesture.startPan = previewPanRef.current;
+    setIsDraggingPreview(true);
   };
 
   const handlePreviewPointerMove = (
@@ -630,7 +620,7 @@ export default function App() {
       return;
     }
 
-    if (points.length === 1 && (event.pointerType === "touch" || isPanMode)) {
+    if (points.length === 1) {
       gesture.mode = "pan";
       gesture.startPoint = points[0];
       gesture.startPan = previewPanRef.current;
@@ -655,22 +645,167 @@ export default function App() {
     }
   }
 
-  const previewCursorClass = isPanMode
-    ? isDraggingPreview
-      ? "cursor-grabbing"
-      : "cursor-grab"
-    : "";
+  const renderEditorSection = (section: ResumeSectionId) => {
+    switch (section) {
+      case "summary":
+        return (
+          <FormSection
+            key={section}
+            title="Professional Summary"
+            icon={<FileTextIcon size={18} />}
+            isOpen={openSection === "summary"}
+            onToggle={() => toggle("summary")}
+          >
+            <SummaryForm
+              value={data.summary}
+              onChange={resume.updateSummary}
+            />
+          </FormSection>
+        );
+      case "experience":
+        return (
+          <FormSection
+            key={section}
+            title="Experience"
+            icon={<BriefcaseIcon size={18} />}
+            isOpen={openSection === "experience"}
+            onToggle={() => toggle("experience")}
+            count={data.experience.length}
+          >
+            <ExperienceForm
+              items={data.experience}
+              onAdd={resume.addExperience}
+              onUpdate={resume.updateExperience}
+              onRemove={resume.removeExperience}
+              onReorder={resume.reorderExperience}
+            />
+          </FormSection>
+        );
+      case "education":
+        return (
+          <FormSection
+            key={section}
+            title="Education"
+            icon={<GraduationCapIcon size={18} />}
+            isOpen={openSection === "education"}
+            onToggle={() => toggle("education")}
+            count={data.education.length}
+          >
+            <EducationForm
+              items={data.education}
+              onAdd={resume.addEducation}
+              onUpdate={resume.updateEducation}
+              onRemove={resume.removeEducation}
+              onReorder={resume.reorderEducation}
+            />
+          </FormSection>
+        );
+      case "skills":
+        return (
+          <FormSection
+            key={section}
+            title="Skills"
+            icon={<ZapIcon size={18} />}
+            isOpen={openSection === "skills"}
+            onToggle={() => toggle("skills")}
+            count={data.skills.length}
+          >
+            <SkillsForm
+              items={data.skills}
+              onAdd={resume.addSkillGroup}
+              onUpdate={resume.updateSkillGroup}
+              onRemove={resume.removeSkillGroup}
+              onReorder={resume.reorderSkillGroups}
+            />
+          </FormSection>
+        );
+      case "projects":
+        return (
+          <FormSection
+            key={section}
+            title="Projects"
+            icon={<RocketIcon size={18} />}
+            isOpen={openSection === "projects"}
+            onToggle={() => toggle("projects")}
+            count={data.projects.length}
+          >
+            <ProjectsForm
+              items={data.projects}
+              onAdd={resume.addProject}
+              onUpdate={resume.updateProject}
+              onRemove={resume.removeProject}
+              onReorder={resume.reorderProjects}
+            />
+          </FormSection>
+        );
+      case "certifications":
+        return (
+          <FormSection
+            key={section}
+            title="Certifications"
+            icon={<AwardIcon size={18} />}
+            isOpen={openSection === "certifications"}
+            onToggle={() => toggle("certifications")}
+            count={data.certifications.length}
+          >
+            <CertificationsForm
+              items={data.certifications}
+              onAdd={resume.addCertification}
+              onUpdate={resume.updateCertification}
+              onRemove={resume.removeCertification}
+              onReorder={resume.reorderCertifications}
+            />
+          </FormSection>
+        );
+      case "extras":
+        return (
+          <FormSection
+            key={section}
+            title="Extras"
+            icon={<StarIcon size={18} />}
+            isOpen={openSection === "extras"}
+            onToggle={() => toggle("extras")}
+            count={
+              data.languages.length +
+              data.awards.length +
+              data.volunteer.length
+            }
+          >
+            <ExtrasForm
+              languages={data.languages}
+              awards={data.awards}
+              volunteer={data.volunteer}
+              onAddLanguage={resume.addLanguage}
+              onUpdateLanguage={resume.updateLanguage}
+              onRemoveLanguage={resume.removeLanguage}
+              onReorderLanguages={resume.reorderLanguages}
+              onAddAward={resume.addAward}
+              onUpdateAward={resume.updateAward}
+              onRemoveAward={resume.removeAward}
+              onReorderAwards={resume.reorderAwards}
+              onAddVolunteer={resume.addVolunteer}
+              onUpdateVolunteer={resume.updateVolunteer}
+              onRemoveVolunteer={resume.removeVolunteer}
+              onReorderVolunteer={resume.reorderVolunteer}
+            />
+          </FormSection>
+        );
+    }
+  };
 
+  const previewCursorClass = isDraggingPreview
+    ? "cursor-grabbing"
+    : "cursor-grab";
   return (
     <div className={`${isDarkMode ? "dark" : ""} h-full`}>
       <div className="app-shell flex h-full min-h-full text-zinc-900 dark:text-zinc-200 overflow-hidden font-sans selection:bg-cyan-900/15 dark:selection:bg-cyan-300/20 flex-col lg:flex-row relative">
         {/* ── Left Panel: Editor ── */}
         <aside
-          className={`editor-panel w-full lg:w-[430px] lg:flex-none lg:flex-shrink-0 flex-1 min-h-0 flex flex-col border-r border-white/70 dark:border-white/10 bg-white/88 dark:bg-zinc-950/82 backdrop-blur-2xl relative z-20 shadow-2xl print:hidden ${view === "edit" ? "flex panel-enter" : "hidden lg:flex"}`}
+          className={`editor-panel w-full lg:w-[430px] lg:flex-none lg:flex-shrink-0 flex-1 min-h-0 flex flex-col relative z-20 print:hidden ${view === "edit" ? "flex panel-enter" : "hidden lg:flex"}`}
         >
           {/* Header */}
-          <div className="relative overflow-hidden px-5 py-5 sm:px-6 border-b border-white/70 dark:border-white/10">
-            <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(8,145,178,0.14),rgba(245,158,11,0.10)_45%,rgba(255,255,255,0)_80%)] dark:bg-[linear-gradient(135deg,rgba(34,211,238,0.13),rgba(245,158,11,0.10)_45%,rgba(9,9,11,0)_80%)]" />
+          <div className="editor-header relative overflow-hidden px-5 py-5 sm:px-6">
+            <div className="editor-header-glow absolute inset-0" />
             <div className="flex items-center gap-3">
               <img
                 src="/images/logo.png"
@@ -689,7 +824,7 @@ export default function App() {
           </div>
 
           {/* Template Picker */}
-          <div className="px-5 py-4 sm:px-6 border-b border-white/70 dark:border-white/10 bg-white/45 dark:bg-white/[0.03]">
+          <div className="editor-toolbar px-5 py-4 sm:px-6">
             <div className="flex items-center justify-between mb-3">
               <p className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
                 Template
@@ -699,7 +834,12 @@ export default function App() {
               {TEMPLATES.map((t) => (
                 <button
                   key={t.id}
-                  onClick={() => resume.setTemplate(t.id)}
+                  onClick={() => {
+                    resume.setTemplate(t.id);
+                    if (t.id !== "cv" && openSection === "picture") {
+                      setOpenSection("personal");
+                    }
+                  }}
                   style={{ "--template-accent": t.accent } as CSSProperties}
                   className={`template-card py-3 rounded-xl text-[12px] font-extrabold transition-all duration-300 ${
                     data.template === t.id
@@ -711,10 +851,16 @@ export default function App() {
                 </button>
               ))}
             </div>
+            {data.template === "classic" && resumeContentScale < 0.9 && (
+              <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2.5 text-[10px] font-semibold leading-relaxed text-amber-800 ring-1 ring-amber-200 dark:bg-amber-500/10 dark:text-amber-200 dark:ring-amber-500/20">
+                Content is dense. Shorten older roles or project descriptions
+                to keep the resume comfortably readable.
+              </p>
+            )}
           </div>
 
           {/* Data Transfer */}
-          <div className="px-5 py-3 sm:px-6 border-b border-white/70 dark:border-white/10 flex gap-2 bg-white/35 dark:bg-white/[0.02]">
+          <div className="editor-data-actions px-5 py-3 sm:px-6 flex gap-2">
             <button
               onClick={handleExportData}
               className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-white/75 dark:bg-zinc-900/80 hover:bg-cyan-50 dark:hover:bg-cyan-500/10 hover:text-cyan-700 dark:hover:text-cyan-200 text-zinc-600 dark:text-zinc-300 text-xs font-bold transition-all active:scale-95 shadow-sm ring-1 ring-zinc-200/70 dark:ring-white/10"
@@ -742,7 +888,7 @@ export default function App() {
           </div>
 
           {/* Form Sections (scrollable) */}
-          <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-3 pb-44 lg:pb-12 scrollbar-thin">
+          <div className="editor-scroll flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-3 pb-44 lg:pb-12 scrollbar-thin">
             <FormSection
               title="Personal Info"
               icon={<UserIcon size={18} />}
@@ -770,123 +916,11 @@ export default function App() {
               </FormSection>
             )}
 
-            <FormSection
-              title="Objectives"
-              icon={<FileTextIcon size={18} />}
-              isOpen={openSection === "summary"}
-              onToggle={() => toggle("summary")}
-            >
-              <SummaryForm
-                value={data.summary}
-                onChange={resume.updateSummary}
-              />
-            </FormSection>
-
-            <FormSection
-              title="Experience"
-              icon={<BriefcaseIcon size={18} />}
-              isOpen={openSection === "experience"}
-              onToggle={() => toggle("experience")}
-              count={data.experience.length}
-            >
-              <ExperienceForm
-                items={data.experience}
-                onAdd={resume.addExperience}
-                onUpdate={resume.updateExperience}
-                onRemove={resume.removeExperience}
-              />
-            </FormSection>
-
-            <FormSection
-              title="Education"
-              icon={<GraduationCapIcon size={18} />}
-              isOpen={openSection === "education"}
-              onToggle={() => toggle("education")}
-              count={data.education.length}
-            >
-              <EducationForm
-                items={data.education}
-                onAdd={resume.addEducation}
-                onUpdate={resume.updateEducation}
-                onRemove={resume.removeEducation}
-              />
-            </FormSection>
-
-            <FormSection
-              title="Skills"
-              icon={<ZapIcon size={18} />}
-              isOpen={openSection === "skills"}
-              onToggle={() => toggle("skills")}
-              count={data.skills.length}
-            >
-              <SkillsForm
-                items={data.skills}
-                onAdd={resume.addSkillGroup}
-                onUpdate={resume.updateSkillGroup}
-                onRemove={resume.removeSkillGroup}
-              />
-            </FormSection>
-
-            <FormSection
-              title="Projects"
-              icon={<RocketIcon size={18} />}
-              isOpen={openSection === "projects"}
-              onToggle={() => toggle("projects")}
-              count={data.projects.length}
-            >
-              <ProjectsForm
-                items={data.projects}
-                onAdd={resume.addProject}
-                onUpdate={resume.updateProject}
-                onRemove={resume.removeProject}
-              />
-            </FormSection>
-
-            <FormSection
-              title="Certifications"
-              icon={<AwardIcon size={18} />}
-              isOpen={openSection === "certifications"}
-              onToggle={() => toggle("certifications")}
-              count={data.certifications.length}
-            >
-              <CertificationsForm
-                items={data.certifications}
-                onAdd={resume.addCertification}
-                onUpdate={resume.updateCertification}
-                onRemove={resume.removeCertification}
-              />
-            </FormSection>
-
-            <FormSection
-              title="Extras"
-              icon={<StarIcon size={18} />}
-              isOpen={openSection === "extras"}
-              onToggle={() => toggle("extras")}
-              count={
-                data.languages.length +
-                data.awards.length +
-                data.volunteer.length
-              }
-            >
-              <ExtrasForm
-                languages={data.languages}
-                awards={data.awards}
-                volunteer={data.volunteer}
-                onAddLanguage={resume.addLanguage}
-                onUpdateLanguage={resume.updateLanguage}
-                onRemoveLanguage={resume.removeLanguage}
-                onAddAward={resume.addAward}
-                onUpdateAward={resume.updateAward}
-                onRemoveAward={resume.removeAward}
-                onAddVolunteer={resume.addVolunteer}
-                onUpdateVolunteer={resume.updateVolunteer}
-                onRemoveVolunteer={resume.removeVolunteer}
-              />
-            </FormSection>
+            {DEFAULT_SECTION_ORDER.map(renderEditorSection)}
           </div>
 
           {/* Footer Actions */}
-          <div className="hidden lg:flex px-5 py-4 border-t border-white/70 dark:border-white/10 bg-white/55 dark:bg-zinc-950/70 gap-3 relative">
+          <div className="editor-footer hidden lg:flex px-5 py-4 gap-3 relative">
             <div className="absolute inset-0 bg-gradient-to-t from-cyan-500/5 to-transparent pointer-events-none" />
             <button
               onClick={handlePrint}
@@ -963,14 +997,11 @@ export default function App() {
             </button>
             <div className="h-px w-6 bg-zinc-200 dark:bg-zinc-700" />
             <button
-              onClick={() => setIsPanMode((current) => !current)}
-              title={isPanMode ? "Disable hand tool" : "Enable hand tool"}
-              aria-label={isPanMode ? "Disable hand tool" : "Enable hand tool"}
-              className={`flex h-10 w-10 items-center justify-center rounded-xl transition ${
-                isPanMode
-                  ? "bg-zinc-950 text-white shadow-sm dark:bg-white dark:text-zinc-950"
-                  : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
-              }`}
+              type="button"
+              title="Hand tool is always enabled"
+              aria-label="Hand tool is always enabled"
+              aria-pressed="true"
+              className="flex h-10 w-10 cursor-default items-center justify-center rounded-xl bg-zinc-950 text-white shadow-sm dark:bg-white dark:text-zinc-950"
             >
               <HandIcon size={18} />
             </button>
@@ -1010,8 +1041,7 @@ export default function App() {
                 className={`resume-paper resume-template-${data.template}`}
                 ref={resumePaperRef}
                 style={{
-                  transform: `translate(-50%, -50%) translate(${Math.round(previewPan.x)}px, ${Math.round(previewPan.y)}px)`,
-                  zoom: previewScale,
+                  transform: `translate(-50%, -50%) translate(${Math.round(previewPan.x)}px, ${Math.round(previewPan.y)}px) scale(${previewScale})`,
                 }}
               >
                 <div

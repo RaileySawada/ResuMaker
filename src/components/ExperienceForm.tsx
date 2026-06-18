@@ -2,12 +2,20 @@ import { useState } from "react";
 import type { WorkExperience } from "../lib/types";
 import { createExperience } from "../lib/defaultData";
 import { ChevronDownIcon, PlusIcon, XIcon } from "./Icons";
+import CharacterCount from "./CharacterCount";
+import { CONTENT_LIMITS } from "../lib/contentLimits";
+import DragHandle from "./DragHandle";
+import {
+  useDraggableList,
+  type DraggableItemProps,
+} from "../lib/useDraggableList";
 
 interface Props {
   items: WorkExperience[];
   onAdd: (exp: WorkExperience) => void;
   onUpdate: (id: string, updates: Partial<WorkExperience>) => void;
   onRemove: (id: string) => void;
+  onReorder: (sourceId: string, targetId: string) => void;
 }
 
 function InputField({
@@ -18,6 +26,7 @@ function InputField({
   type = "text",
   disabled,
   required = false,
+  maxLength = CONTENT_LIMITS.shortTitle,
 }: {
   label: string;
   value: string;
@@ -26,6 +35,7 @@ function InputField({
   type?: string;
   disabled?: boolean;
   required?: boolean;
+  maxLength?: number;
 }) {
   return (
     <div>
@@ -45,6 +55,7 @@ function InputField({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
+        maxLength={maxLength}
         className={`w-full bg-zinc-50 dark:bg-zinc-900/50 border rounded-lg px-3 py-2 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-1 transition shadow-sm disabled:opacity-40 disabled:bg-zinc-100 dark:disabled:bg-zinc-900/50 ${required && !value
             ? "border-red-500/30 focus:border-zinc-900 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20"
             : "border-zinc-200 dark:border-zinc-800 focus:border-zinc-900 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20"
@@ -58,19 +69,25 @@ function ExperienceCard({
   exp,
   onUpdate,
   onRemove,
+  dragProps,
 }: {
   exp: WorkExperience;
   onUpdate: (updates: Partial<WorkExperience>) => void;
   onRemove: () => void;
+  dragProps: DraggableItemProps;
 }) {
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <div className="border border-zinc-200 dark:border-zinc-800/80 rounded-xl overflow-hidden bg-white/50 dark:bg-zinc-900/30 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700/80">
+    <div
+      {...dragProps}
+      className="draggable-item border border-zinc-200 dark:border-zinc-800/80 rounded-xl overflow-hidden bg-white/50 dark:bg-zinc-900/30 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700/80"
+    >
       <div
         className="flex items-center gap-3 px-4 py-3 bg-zinc-50 dark:bg-zinc-900/50 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors group"
         onClick={() => setExpanded((x) => !x)}
       >
+        <DragHandle />
         <div className="flex-1 min-w-0">
           <p className="text-[13px] font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
             {exp.position || exp.company || "New Experience"}
@@ -103,6 +120,7 @@ function ExperienceCard({
               onChange={(v) => onUpdate({ company: v })}
               placeholder="Brightway Services"
               required
+              maxLength={CONTENT_LIMITS.organization}
             />
             <InputField
               label="Title"
@@ -110,12 +128,14 @@ function ExperienceCard({
               onChange={(v) => onUpdate({ position: v })}
               placeholder="Team Member"
               required
+              maxLength={CONTENT_LIMITS.shortTitle}
             />
             <InputField
               label="Location"
               value={exp.location}
               onChange={(v) => onUpdate({ location: v })}
               placeholder="Makati City or Remote"
+              maxLength={CONTENT_LIMITS.location}
             />
             <div />
             <InputField
@@ -144,7 +164,7 @@ function ExperienceCard({
                     endDate: e.target.checked ? "" : exp.endDate,
                   })
                 }
-                className="peer appearance-none w-4 h-4 border border-zinc-300 dark:border-zinc-600 rounded bg-white dark:bg-zinc-900/50 checked:bg-zinc-950 checked:border-zinc-950 dark:checked:bg-white dark:checked:border-white transition-colors cursor-pointer"
+                className="peer appearance-none w-4 h-4 border border-zinc-300 dark:border-slate-600 rounded bg-white dark:bg-slate-950 checked:bg-cyan-700 checked:border-cyan-700 dark:checked:bg-cyan-500 dark:checked:border-cyan-400 transition-colors cursor-pointer"
               />
               <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
@@ -157,18 +177,25 @@ function ExperienceCard({
             <label className="block text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1.5">
               Responsibilities & Achievements
               <span className="text-zinc-600 ml-1 font-medium lowercase tracking-normal">
-                (one per line)
+                (one achievement per line)
               </span>
             </label>
             <textarea
               value={exp.description}
               onChange={(e) => onUpdate({ description: e.target.value })}
               rows={5}
+              maxLength={CONTENT_LIMITS.experienceDescription}
               placeholder={
-                "Assisted customers with questions and daily requests\nKept records organized and updated at the end of each shift\nWorked with the team to finish tasks on time during busy hours"
+                "Resolved 40+ customer requests per day while maintaining a 95% satisfaction score\nReduced weekly reporting time by 25% by improving the tracking process\nCollaborated with a 6-person team to complete priority work ahead of schedule"
               }
               className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm resize-none"
             />
+            <div className="mt-1.5 flex justify-end">
+              <CharacterCount
+                value={exp.description}
+                max={CONTENT_LIMITS.experienceDescription}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -181,7 +208,10 @@ export default function ExperienceForm({
   onAdd,
   onUpdate,
   onRemove,
+  onReorder,
 }: Props) {
+  const { getItemProps } = useDraggableList(onReorder);
+
   return (
     <div className="space-y-4">
       {items.length === 0 && (
@@ -198,6 +228,7 @@ export default function ExperienceForm({
             exp={exp}
             onUpdate={(updates) => onUpdate(exp.id, updates)}
             onRemove={() => onRemove(exp.id)}
+            dragProps={getItemProps(exp.id)}
           />
         ))}
       </div>

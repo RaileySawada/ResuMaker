@@ -1,4 +1,5 @@
 import type { PersonalInfo } from "../lib/types";
+import { CONTENT_LIMITS } from "../lib/contentLimits";
 
 interface Props {
   data: PersonalInfo;
@@ -12,6 +13,7 @@ const Field = ({
   placeholder,
   type = "text",
   required = false,
+  maxLength = CONTENT_LIMITS.shortTitle,
 }: {
   label: string;
   value: string;
@@ -19,6 +21,7 @@ const Field = ({
   placeholder?: string;
   type?: string;
   required?: boolean;
+  maxLength?: number;
 }) => (
   <div>
     <div className="flex justify-between items-center mb-1.5">
@@ -36,6 +39,7 @@ const Field = ({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
+      maxLength={maxLength}
       className={`w-full bg-zinc-50 dark:bg-zinc-900/50 border rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-1 transition shadow-sm ${
         required && !value
           ? "border-red-500/30 focus:border-zinc-900 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20"
@@ -56,6 +60,7 @@ export default function PersonalInfoForm({ data, onChange }: Props) {
             onChange={(v) => onChange("fullName", v)}
             placeholder="Jane Doe"
             required
+            maxLength={60}
           />
         </div>
         <div className="col-span-2">
@@ -64,6 +69,7 @@ export default function PersonalInfoForm({ data, onChange }: Props) {
             value={data.jobTitle}
             onChange={(v) => onChange("jobTitle", v)}
             placeholder="Customer Service Associate"
+            maxLength={60}
           />
         </div>
         <Field
@@ -73,12 +79,14 @@ export default function PersonalInfoForm({ data, onChange }: Props) {
           placeholder="jane@email.com"
           type="email"
           required
+          maxLength={100}
         />
         <Field
           label="Phone"
           value={data.phone}
           onChange={(v) => onChange("phone", v)}
           placeholder="+1 (555) 000-0000"
+          maxLength={30}
         />
         <div className="col-span-2">
           <Field
@@ -86,6 +94,7 @@ export default function PersonalInfoForm({ data, onChange }: Props) {
             value={data.location}
             onChange={(v) => onChange("location", v)}
             placeholder="Quezon City, Philippines"
+            maxLength={CONTENT_LIMITS.location}
           />
         </div>
         <Field
@@ -117,12 +126,14 @@ export default function PersonalInfoForm({ data, onChange }: Props) {
           value={data.linkedin}
           onChange={(v) => onChange("linkedin", v)}
           placeholder="linkedin.com/in/yourname"
+          maxLength={CONTENT_LIMITS.url}
         />
         <Field
           label="Professional Profile"
           value={data.github}
           onChange={(v) => onChange("github", v)}
           placeholder="Online profile or work sample link"
+          maxLength={CONTENT_LIMITS.url}
         />
         <div className="col-span-2">
           <Field
@@ -130,6 +141,7 @@ export default function PersonalInfoForm({ data, onChange }: Props) {
             value={data.website}
             onChange={(v) => onChange("website", v)}
             placeholder="yourname.com or online portfolio"
+            maxLength={CONTENT_LIMITS.url}
           />
         </div>
       </div>

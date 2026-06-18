@@ -2,12 +2,19 @@ import { useState } from "react";
 import type { Certification } from "../lib/types";
 import { createCertification } from "../lib/defaultData";
 import { ChevronDownIcon, PlusIcon, XIcon } from "./Icons";
+import { CONTENT_LIMITS } from "../lib/contentLimits";
+import DragHandle from "./DragHandle";
+import {
+  useDraggableList,
+  type DraggableItemProps,
+} from "../lib/useDraggableList";
 
 interface Props {
   items: Certification[];
   onAdd: (c: Certification) => void;
   onUpdate: (id: string, updates: Partial<Certification>) => void;
   onRemove: (id: string) => void;
+  onReorder: (sourceId: string, targetId: string) => void;
 }
 
 function InputField({
@@ -16,12 +23,14 @@ function InputField({
   onChange,
   placeholder,
   type = "text",
+  maxLength = CONTENT_LIMITS.organization,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   placeholder?: string;
   type?: string;
+  maxLength?: number;
 }) {
   return (
     <div>
@@ -33,6 +42,7 @@ function InputField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        maxLength={maxLength}
         className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm"
       />
     </div>
@@ -43,19 +53,25 @@ function CertCard({
   cert,
   onUpdate,
   onRemove,
+  dragProps,
 }: {
   cert: Certification;
   onUpdate: (updates: Partial<Certification>) => void;
   onRemove: () => void;
+  dragProps: DraggableItemProps;
 }) {
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <div className="border border-zinc-200 dark:border-zinc-800/80 rounded-xl overflow-hidden bg-white/50 dark:bg-zinc-900/30 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700/80">
+    <div
+      {...dragProps}
+      className="draggable-item border border-zinc-200 dark:border-zinc-800/80 rounded-xl overflow-hidden bg-white/50 dark:bg-zinc-900/30 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700/80"
+    >
       <div
         className="flex items-center gap-3 px-4 py-3 bg-zinc-50 dark:bg-zinc-900/50 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors group"
         onClick={() => setExpanded((x) => !x)}
       >
+        <DragHandle />
         <div className="flex-1 min-w-0">
           <p className="text-[13px] font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
             {cert.name || "New Certification"}
@@ -87,6 +103,7 @@ function CertCard({
                 value={cert.name}
                 onChange={(v) => onUpdate({ name: v })}
                 placeholder="Customer Service Training"
+                maxLength={CONTENT_LIMITS.shortTitle}
               />
             </div>
             <div className="col-span-2">
@@ -95,6 +112,7 @@ function CertCard({
                 value={cert.issuer}
                 onChange={(v) => onUpdate({ issuer: v })}
                 placeholder="Training center or organization"
+                maxLength={CONTENT_LIMITS.organization}
               />
             </div>
             <InputField
@@ -115,6 +133,7 @@ function CertCard({
                 value={cert.credentialUrl}
                 onChange={(v) => onUpdate({ credentialUrl: v })}
                 placeholder="Optional certificate link"
+                maxLength={CONTENT_LIMITS.url}
               />
             </div>
           </div>
@@ -129,7 +148,10 @@ export default function CertificationsForm({
   onAdd,
   onUpdate,
   onRemove,
+  onReorder,
 }: Props) {
+  const { getItemProps } = useDraggableList(onReorder);
+
   return (
     <div className="space-y-4">
       {items.length === 0 && (
@@ -145,6 +167,7 @@ export default function CertificationsForm({
             cert={c}
             onUpdate={(u) => onUpdate(c.id, u)}
             onRemove={() => onRemove(c.id)}
+            dragProps={getItemProps(c.id)}
           />
         ))}
       </div>

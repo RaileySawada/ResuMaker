@@ -2,12 +2,20 @@ import { useState } from "react";
 import type { Project } from "../lib/types";
 import { createProject } from "../lib/defaultData";
 import { ChevronDownIcon, PlusIcon, XIcon } from "./Icons";
+import CharacterCount from "./CharacterCount";
+import { CONTENT_LIMITS } from "../lib/contentLimits";
+import DragHandle from "./DragHandle";
+import {
+  useDraggableList,
+  type DraggableItemProps,
+} from "../lib/useDraggableList";
 
 interface Props {
   items: Project[];
   onAdd: (p: Project) => void;
   onUpdate: (id: string, updates: Partial<Project>) => void;
   onRemove: (id: string) => void;
+  onReorder: (sourceId: string, targetId: string) => void;
 }
 
 function InputField({
@@ -16,12 +24,14 @@ function InputField({
   onChange,
   placeholder,
   type = "text",
+  maxLength = CONTENT_LIMITS.shortTitle,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   placeholder?: string;
   type?: string;
+  maxLength?: number;
 }) {
   return (
     <div>
@@ -33,6 +43,7 @@ function InputField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        maxLength={maxLength}
         className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm"
       />
     </div>
@@ -43,19 +54,25 @@ function ProjectCard({
   project,
   onUpdate,
   onRemove,
+  dragProps,
 }: {
   project: Project;
   onUpdate: (updates: Partial<Project>) => void;
   onRemove: () => void;
+  dragProps: DraggableItemProps;
 }) {
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <div className="border border-zinc-200 dark:border-zinc-800/80 rounded-xl overflow-hidden bg-white/50 dark:bg-zinc-900/30 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700/80">
+    <div
+      {...dragProps}
+      className="draggable-item border border-zinc-200 dark:border-zinc-800/80 rounded-xl overflow-hidden bg-white/50 dark:bg-zinc-900/30 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700/80"
+    >
       <div
         className="flex items-center gap-3 px-4 py-3 bg-zinc-50 dark:bg-zinc-900/50 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors group"
         onClick={() => setExpanded((x) => !x)}
       >
+        <DragHandle />
         <div className="flex-1 min-w-0">
           <p className="text-[13px] font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
             {project.name || "New Project"}
@@ -97,6 +114,7 @@ function ProjectCard({
                 value={project.technologies}
                 onChange={(v) => onUpdate({ technologies: v })}
                 placeholder="Planning, Budgeting, Social Media"
+                maxLength={CONTENT_LIMITS.skillsItems}
               />
             </div>
             <InputField
@@ -116,12 +134,14 @@ function ProjectCard({
               value={project.liveUrl}
               onChange={(v) => onUpdate({ liveUrl: v })}
               placeholder="Link to project or page"
+              maxLength={CONTENT_LIMITS.url}
             />
             <InputField
               label="Extra Link"
               value={project.repoUrl}
               onChange={(v) => onUpdate({ repoUrl: v })}
               placeholder="Optional supporting link"
+              maxLength={CONTENT_LIMITS.url}
             />
           </div>
 
@@ -136,11 +156,18 @@ function ProjectCard({
               value={project.description}
               onChange={(e) => onUpdate({ description: e.target.value })}
               rows={4}
+              maxLength={CONTENT_LIMITS.projectDescription}
               placeholder={
                 "Coordinated volunteers and prepared the activity schedule\nCreated simple posters and shared updates online\nHelped collect supplies and report the final results"
               }
               className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm resize-none"
             />
+            <div className="mt-1.5 flex justify-end">
+              <CharacterCount
+                value={project.description}
+                max={CONTENT_LIMITS.projectDescription}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -153,7 +180,10 @@ export default function ProjectsForm({
   onAdd,
   onUpdate,
   onRemove,
+  onReorder,
 }: Props) {
+  const { getItemProps } = useDraggableList(onReorder);
+
   return (
     <div className="space-y-4">
       <p className="text-[12px] text-zinc-500 dark:text-zinc-400 leading-relaxed px-1">
@@ -174,6 +204,7 @@ export default function ProjectsForm({
             project={p}
             onUpdate={(u) => onUpdate(p.id, u)}
             onRemove={() => onRemove(p.id)}
+            dragProps={getItemProps(p.id)}
           />
         ))}
       </div>

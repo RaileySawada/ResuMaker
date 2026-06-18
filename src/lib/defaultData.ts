@@ -10,6 +10,17 @@ import type {
   VolunteerWork,
 } from "./types";
 import { generateId } from "./utils";
+import type { ResumeSectionId } from "./types";
+
+export const DEFAULT_SECTION_ORDER: ResumeSectionId[] = [
+  "summary",
+  "skills",
+  "experience",
+  "projects",
+  "education",
+  "certifications",
+  "extras",
+];
 
 export const createEmptyResume = (): ResumeData => ({
   personal: {

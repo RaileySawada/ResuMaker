@@ -2,12 +2,20 @@ import { useState } from "react";
 import type { Education } from "../lib/types";
 import { createEducation } from "../lib/defaultData";
 import { ChevronDownIcon, PlusIcon, XIcon } from "./Icons";
+import CharacterCount from "./CharacterCount";
+import { CONTENT_LIMITS } from "../lib/contentLimits";
+import DragHandle from "./DragHandle";
+import {
+  useDraggableList,
+  type DraggableItemProps,
+} from "../lib/useDraggableList";
 
 interface Props {
   items: Education[];
   onAdd: (edu: Education) => void;
   onUpdate: (id: string, updates: Partial<Education>) => void;
   onRemove: (id: string) => void;
+  onReorder: (sourceId: string, targetId: string) => void;
 }
 
 function InputField({
@@ -18,6 +26,7 @@ function InputField({
   type = "text",
   disabled,
   required = false,
+  maxLength = CONTENT_LIMITS.shortTitle,
 }: {
   label: string;
   value: string;
@@ -26,6 +35,7 @@ function InputField({
   type?: string;
   disabled?: boolean;
   required?: boolean;
+  maxLength?: number;
 }) {
   return (
     <div>
@@ -45,6 +55,7 @@ function InputField({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
+        maxLength={maxLength}
         className={`w-full bg-zinc-50 dark:bg-zinc-900/50 border rounded-lg px-3 py-2 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-1 transition shadow-sm disabled:opacity-40 disabled:bg-zinc-100 dark:disabled:bg-zinc-900/50 ${
           required && !value
             ? "border-red-500/30 focus:border-zinc-900 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20"
@@ -59,19 +70,25 @@ function EducationCard({
   edu,
   onUpdate,
   onRemove,
+  dragProps,
 }: {
   edu: Education;
   onUpdate: (updates: Partial<Education>) => void;
   onRemove: () => void;
+  dragProps: DraggableItemProps;
 }) {
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <div className="border border-zinc-200 dark:border-zinc-800/80 rounded-xl overflow-hidden bg-white/50 dark:bg-zinc-900/30 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700/80">
+    <div
+      {...dragProps}
+      className="draggable-item border border-zinc-200 dark:border-zinc-800/80 rounded-xl overflow-hidden bg-white/50 dark:bg-zinc-900/30 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700/80"
+    >
       <div
         className="flex items-center gap-3 px-4 py-3 bg-zinc-50 dark:bg-zinc-900/50 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors group"
         onClick={() => setExpanded((x) => !x)}
       >
+        <DragHandle />
         <div className="flex-1 min-w-0">
           <p className="text-[13px] font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
             {edu.institution || "New Education"}
@@ -106,6 +123,7 @@ function EducationCard({
                 onChange={(v) => onUpdate({ institution: v })}
                 placeholder="Name of your school"
                 required
+                maxLength={CONTENT_LIMITS.organization}
               />
             </div>
             <InputField
@@ -125,6 +143,7 @@ function EducationCard({
               value={edu.location}
               onChange={(v) => onUpdate({ location: v })}
               placeholder="Manila, Philippines"
+              maxLength={CONTENT_LIMITS.location}
             />
             <InputField
               label="GPA"
@@ -158,7 +177,7 @@ function EducationCard({
                     endDate: e.target.checked ? "" : edu.endDate,
                   })
                 }
-                className="peer appearance-none w-4 h-4 border border-zinc-300 dark:border-zinc-600 rounded bg-white dark:bg-zinc-900/50 checked:bg-zinc-950 checked:border-zinc-950 dark:checked:bg-white dark:checked:border-white transition-colors cursor-pointer"
+                className="peer appearance-none w-4 h-4 border border-zinc-300 dark:border-slate-600 rounded bg-white dark:bg-slate-950 checked:bg-cyan-700 checked:border-cyan-700 dark:checked:bg-cyan-500 dark:checked:border-cyan-400 transition-colors cursor-pointer"
               />
               <svg className="absolute w-3 h-3 text-white opacity-0 peer-checked:opacity-100 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
@@ -175,11 +194,18 @@ function EducationCard({
               value={edu.achievements}
               onChange={(e) => onUpdate({ achievements: e.target.value })}
               rows={3}
+              maxLength={CONTENT_LIMITS.educationAchievements}
               placeholder={
                 "Dean's List, 2022\nCompleted leadership training\nMember of the student council"
               }
               className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm resize-none"
             />
+            <div className="mt-1.5 flex justify-end">
+              <CharacterCount
+                value={edu.achievements}
+                max={CONTENT_LIMITS.educationAchievements}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -192,7 +218,10 @@ export default function EducationForm({
   onAdd,
   onUpdate,
   onRemove,
+  onReorder,
 }: Props) {
+  const { getItemProps } = useDraggableList(onReorder);
+
   return (
     <div className="space-y-4">
       {items.length === 0 && (
@@ -208,6 +237,7 @@ export default function EducationForm({
             edu={edu}
             onUpdate={(updates) => onUpdate(edu.id, updates)}
             onRemove={() => onRemove(edu.id)}
+            dragProps={getItemProps(edu.id)}
           />
         ))}
       </div>

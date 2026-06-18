@@ -11,6 +11,10 @@ import {
   createVolunteer,
 } from "../lib/defaultData";
 import { ChevronDownIcon, PlusIcon, XIcon } from "./Icons";
+import CharacterCount from "./CharacterCount";
+import { CONTENT_LIMITS } from "../lib/contentLimits";
+import DragHandle from "./DragHandle";
+import { useDraggableList } from "../lib/useDraggableList";
 
 const PROFICIENCY_LEVELS: LanguageProficiency[] = [
   "Native",
@@ -27,12 +31,15 @@ interface Props {
   onAddLanguage: (l: Language) => void;
   onUpdateLanguage: (id: string, u: Partial<Language>) => void;
   onRemoveLanguage: (id: string) => void;
+  onReorderLanguages: (sourceId: string, targetId: string) => void;
   onAddAward: (a: Award) => void;
   onUpdateAward: (id: string, u: Partial<Award>) => void;
   onRemoveAward: (id: string) => void;
+  onReorderAwards: (sourceId: string, targetId: string) => void;
   onAddVolunteer: (v: VolunteerWork) => void;
   onUpdateVolunteer: (id: string, u: Partial<VolunteerWork>) => void;
   onRemoveVolunteer: (id: string) => void;
+  onReorderVolunteer: (sourceId: string, targetId: string) => void;
 }
 
 function SubSection({
@@ -59,6 +66,7 @@ function InputField({
   placeholder,
   type = "text",
   disabled,
+  maxLength = CONTENT_LIMITS.organization,
 }: {
   label: string;
   value: string;
@@ -66,6 +74,7 @@ function InputField({
   placeholder?: string;
   type?: string;
   disabled?: boolean;
+  maxLength?: number;
 }) {
   return (
     <div>
@@ -78,6 +87,7 @@ function InputField({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
+        maxLength={maxLength}
         className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm disabled:opacity-40 disabled:bg-zinc-100 dark:disabled:bg-zinc-900/50"
       />
     </div>
@@ -86,6 +96,9 @@ function InputField({
 
 export default function ExtrasForm(props: Props) {
   const [expandedVol, setExpandedVol] = useState<string | null>(null);
+  const languagesDrag = useDraggableList(props.onReorderLanguages);
+  const awardsDrag = useDraggableList(props.onReorderAwards);
+  const volunteerDrag = useDraggableList(props.onReorderVolunteer);
 
   return (
     <div className="space-y-6">
@@ -100,10 +113,13 @@ export default function ExtrasForm(props: Props) {
           {props.languages.map((l) => (
             <div
               key={l.id}
-              className="flex items-center gap-3 bg-white/50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-2 pr-3 shadow-sm group hover:border-zinc-300 dark:hover:border-zinc-700/80 transition-colors"
+              {...languagesDrag.getItemProps(l.id)}
+              className="draggable-item flex items-center gap-2 bg-white/50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-2 pr-3 shadow-sm group hover:border-zinc-300 dark:hover:border-zinc-700/80 transition-colors"
             >
+              <DragHandle />
               <input
                 value={l.name}
+                maxLength={40}
                 onChange={(e) =>
                   props.onUpdateLanguage(l.id, { name: e.target.value })
                 }
@@ -154,8 +170,12 @@ export default function ExtrasForm(props: Props) {
           {props.awards.map((a) => (
             <div
               key={a.id}
-              className="border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-4 space-y-4 bg-white/50 dark:bg-zinc-900/30 shadow-sm relative group hover:border-zinc-300 dark:hover:border-zinc-700/80 transition-colors"
+              {...awardsDrag.getItemProps(a.id)}
+              className="draggable-item border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-4 pl-11 space-y-4 bg-white/50 dark:bg-zinc-900/30 shadow-sm relative group hover:border-zinc-300 dark:hover:border-zinc-700/80 transition-colors"
             >
+              <div className="absolute left-3 top-3">
+                <DragHandle />
+              </div>
               <button
                 onClick={() => props.onRemoveAward(a.id)}
                 className="absolute top-3 right-3 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-colors p-1.5 rounded-md"
@@ -169,6 +189,7 @@ export default function ExtrasForm(props: Props) {
                     value={a.title}
                     onChange={(v) => props.onUpdateAward(a.id, { title: v })}
                     placeholder="Employee of the Month"
+                    maxLength={CONTENT_LIMITS.shortTitle}
                   />
                 </div>
                 <InputField
@@ -176,6 +197,7 @@ export default function ExtrasForm(props: Props) {
                   value={a.issuer}
                   onChange={(v) => props.onUpdateAward(a.id, { issuer: v })}
                   placeholder="Company, school, or organization"
+                  maxLength={CONTENT_LIMITS.organization}
                 />
                 <InputField
                   label="Date"
@@ -191,6 +213,7 @@ export default function ExtrasForm(props: Props) {
                       props.onUpdateAward(a.id, { description: v })
                     }
                     placeholder="What did you receive it for?"
+                    maxLength={CONTENT_LIMITS.awardDescription}
                   />
                 </div>
               </div>
@@ -217,7 +240,8 @@ export default function ExtrasForm(props: Props) {
           {props.volunteer.map((v) => (
             <div
               key={v.id}
-              className="border border-zinc-200 dark:border-zinc-800/80 rounded-xl overflow-hidden bg-white/50 dark:bg-zinc-900/30 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700/80"
+              {...volunteerDrag.getItemProps(v.id)}
+              className="draggable-item border border-zinc-200 dark:border-zinc-800/80 rounded-xl overflow-hidden bg-white/50 dark:bg-zinc-900/30 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700/80"
             >
               <div
                 className="flex items-center gap-3 px-4 py-3 bg-zinc-50 dark:bg-zinc-900/50 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors group"
@@ -225,6 +249,7 @@ export default function ExtrasForm(props: Props) {
                   setExpandedVol(expandedVol === v.id ? null : v.id)
                 }
               >
+                <DragHandle />
                 <div className="flex-1 min-w-0">
                   <p className="text-[13px] font-bold text-zinc-800 dark:text-zinc-200 truncate group-hover:text-zinc-950 dark:group-hover:text-white transition-colors">
                     {v.role || v.organization || "New Volunteer Role"}
@@ -258,6 +283,7 @@ export default function ExtrasForm(props: Props) {
                         props.onUpdateVolunteer(v.id, { organization: val })
                       }
                       placeholder="Local community group"
+                      maxLength={CONTENT_LIMITS.organization}
                     />
                     <InputField
                       label="Role"
@@ -266,6 +292,7 @@ export default function ExtrasForm(props: Props) {
                         props.onUpdateVolunteer(v.id, { role: val })
                       }
                       placeholder="Volunteer Assistant"
+                      maxLength={CONTENT_LIMITS.shortTitle}
                     />
                     <InputField
                       label="Start Date"
@@ -295,10 +322,10 @@ export default function ExtrasForm(props: Props) {
                             isCurrent: e.target.checked,
                           })
                         }
-                        className="peer appearance-none w-4 h-4 border border-zinc-300 dark:border-zinc-600 rounded bg-white dark:bg-zinc-900/50 checked:bg-zinc-950 checked:border-zinc-950 dark:checked:bg-white dark:checked:border-white transition-colors cursor-pointer"
+                        className="peer appearance-none w-4 h-4 border border-zinc-300 dark:border-slate-600 rounded bg-white dark:bg-slate-950 checked:bg-cyan-700 checked:border-cyan-700 dark:checked:bg-cyan-500 dark:checked:border-cyan-400 transition-colors cursor-pointer"
                       />
                       <svg
-                        className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 pointer-events-none peer-checked:opacity-100 dark:text-zinc-950"
+                        className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 pointer-events-none peer-checked:opacity-100"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -325,9 +352,16 @@ export default function ExtrasForm(props: Props) {
                         })
                       }
                       rows={3}
+                      maxLength={CONTENT_LIMITS.volunteerDescription}
                       placeholder="Helped prepare materials, welcome guests, and keep the activity organized."
                       className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm resize-none"
                     />
+                    <div className="mt-1.5 flex justify-end">
+                      <CharacterCount
+                        value={v.description}
+                        max={CONTENT_LIMITS.volunteerDescription}
+                      />
+                    </div>
                   </div>
                 </div>
               )}

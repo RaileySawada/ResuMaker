@@ -1,4 +1,12 @@
 export type TemplateType = "classic" | "modern" | "minimal" | "cv";
+export type ResumeSectionId =
+  | "summary"
+  | "experience"
+  | "education"
+  | "skills"
+  | "projects"
+  | "certifications"
+  | "extras";
 export type LanguageProficiency =
   | "Native"
   | "Fluent"

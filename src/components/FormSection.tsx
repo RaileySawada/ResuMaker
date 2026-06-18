@@ -19,12 +19,16 @@ export default function FormSection({
   count,
 }: FormSectionProps) {
   return (
-    <div className="form-section-card rounded-2xl overflow-hidden border border-white/70 dark:border-white/10 bg-white/70 dark:bg-zinc-900/55 backdrop-blur-sm transition-all duration-300 shadow-sm">
+    <div
+      className={`form-section-card rounded-2xl overflow-hidden transition-all duration-300 ${
+        isOpen ? "is-open" : ""
+      }`}
+    >
       <button
         onClick={onToggle}
-        className="w-full flex items-center gap-3 px-5 py-4 text-left hover:bg-white/70 dark:hover:bg-white/[0.04] transition-colors group"
+        className="form-section-trigger w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors group"
       >
-        <span className="flex h-9 w-9 flex-none items-center justify-center rounded-xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100 transition-colors group-hover:bg-cyan-100 dark:bg-cyan-400/10 dark:text-cyan-200 dark:ring-cyan-300/10">
+        <span className="form-section-icon flex h-9 w-9 flex-none items-center justify-center rounded-xl transition-all">
           {icon}
         </span>
         <span className="flex-1 text-[13px] font-bold text-zinc-800 dark:text-zinc-200 tracking-widest uppercase">
@@ -35,7 +39,7 @@ export default function FormSection({
             {count}
           </span>
         )}
-        <span className={`text-zinc-500 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}>
+        <span className={`form-section-chevron transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}>
           <ChevronDownIcon size={16} />
         </span>
       </button>
@@ -45,7 +49,7 @@ export default function FormSection({
           isOpen ? "max-h-[9999px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="section-content px-5 pb-5 pt-3 border-t border-zinc-200/70 dark:border-white/10 space-y-4">
+        <div className="section-content px-4 pb-4 pt-4 space-y-4">
           {children}
         </div>
       </div>

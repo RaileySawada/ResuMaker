@@ -1,12 +1,17 @@
 import type { SkillGroup } from "../lib/types";
 import { createSkillGroup } from "../lib/defaultData";
 import { PlusIcon, XIcon } from "./Icons";
+import CharacterCount from "./CharacterCount";
+import { CONTENT_LIMITS } from "../lib/contentLimits";
+import DragHandle from "./DragHandle";
+import { useDraggableList } from "../lib/useDraggableList";
 
 interface Props {
   items: SkillGroup[];
   onAdd: (sg: SkillGroup) => void;
   onUpdate: (id: string, updates: Partial<SkillGroup>) => void;
   onRemove: (id: string) => void;
+  onReorder: (sourceId: string, targetId: string) => void;
 }
 
 export default function SkillsForm({
@@ -14,7 +19,10 @@ export default function SkillsForm({
   onAdd,
   onUpdate,
   onRemove,
+  onReorder,
 }: Props) {
+  const { getItemProps } = useDraggableList(onReorder);
+
   return (
     <div className="space-y-4">
       <p className="text-[12px] text-zinc-500 dark:text-zinc-400 leading-relaxed px-1">
@@ -31,11 +39,14 @@ export default function SkillsForm({
         {items.map((sg) => (
           <div
             key={sg.id}
-            className="border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-4 space-y-3 bg-white/50 dark:bg-zinc-900/30 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700/80 group"
+            {...getItemProps(sg.id)}
+            className="draggable-item border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-4 space-y-3 bg-white/50 dark:bg-zinc-900/30 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-700/80 group"
           >
             <div className="flex items-center gap-3">
+              <DragHandle />
               <input
                 value={sg.category}
+                maxLength={CONTENT_LIMITS.skillsCategory}
                 onChange={(e) => onUpdate(sg.id, { category: e.target.value })}
                 placeholder="Category (e.g. Customer Service)"
                 className="flex-1 bg-transparent border-b border-zinc-200 dark:border-zinc-700/50 pb-1.5 text-[13px] font-bold text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 dark:focus:border-zinc-500 transition-colors"
@@ -49,10 +60,17 @@ export default function SkillsForm({
             </div>
             <input
               value={sg.items}
+              maxLength={CONTENT_LIMITS.skillsItems}
               onChange={(e) => onUpdate(sg.id, { items: e.target.value })}
               placeholder="Communication, Time Management, Teamwork"
               className="w-full bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2.5 text-[13px] text-zinc-900 dark:text-zinc-200 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900/10 dark:focus:border-zinc-500 dark:focus:ring-zinc-500/20 transition shadow-sm"
             />
+            <div className="flex justify-end">
+              <CharacterCount
+                value={sg.items}
+                max={CONTENT_LIMITS.skillsItems}
+              />
+            </div>
             {sg.items && (
               <div className="flex flex-wrap gap-2 pt-1.5">
                 {sg.items

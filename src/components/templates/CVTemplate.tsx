@@ -359,7 +359,7 @@ export default function CVTemplate({ data }: Props) {
 
         <main style={styles.main}>
           {summary && (
-            <Section title="Profile">
+            <Section title="Professional Summary">
               <p style={styles.paragraph}>{summary}</p>
             </Section>
           )}

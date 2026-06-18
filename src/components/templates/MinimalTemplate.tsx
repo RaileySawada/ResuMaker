@@ -1,4 +1,4 @@
-
+/* eslint-disable react-hooks/static-components */
 import type { ResumeData } from "../../lib/types";
 import {
   formatCalendarDate,
@@ -239,7 +239,7 @@ export default function MinimalTemplate({ data }: Props) {
       </div>
 
       {summary && (
-        <Section title="Objectives">
+        <Section title="Professional Summary">
           <p
             style={{
               fontSize: "9pt",

@@ -14,19 +14,22 @@ import type {
 } from "./types";
 import { saveToStorage, loadFromStorage, clearStorage } from "./store";
 import { createEmptyResume } from "./defaultData";
+import { reorderById } from "./reorder";
 
-const normalizeResumeData = (resume: ResumeData): ResumeData => ({
-  ...resume,
-  personal: {
-    ...resume.personal,
-    photo: resume.personal.photo ?? "",
-  },
-  skills: resume.skills.map((skill) =>
-    skill.category === "Technical Skills" && !skill.items.trim()
-      ? { ...skill, category: "" }
-      : skill,
-  ),
-});
+const normalizeResumeData = (resume: ResumeData): ResumeData => {
+  return {
+    ...resume,
+    personal: {
+      ...resume.personal,
+      photo: resume.personal.photo ?? "",
+    },
+    skills: resume.skills.map((skill) =>
+      skill.category === "Technical Skills" && !skill.items.trim()
+        ? { ...skill, category: "" }
+        : skill,
+    ),
+  };
+};
 
 export function useResume() {
   const [data, setData] = useState<ResumeData>(() =>
@@ -82,6 +85,14 @@ export function useResume() {
       })),
     [],
   );
+  const reorderExperience = useCallback(
+    (sourceId: string, targetId: string) =>
+      setData((prev) => ({
+        ...prev,
+        experience: reorderById(prev.experience, sourceId, targetId),
+      })),
+    [],
+  );
 
   // ── Education ──────────────────────────────────────────────────────────────
   const addEducation = useCallback(
@@ -106,6 +117,14 @@ export function useResume() {
       setData((prev) => ({
         ...prev,
         education: prev.education.filter((e) => e.id !== id),
+      })),
+    [],
+  );
+  const reorderEducation = useCallback(
+    (sourceId: string, targetId: string) =>
+      setData((prev) => ({
+        ...prev,
+        education: reorderById(prev.education, sourceId, targetId),
       })),
     [],
   );
@@ -136,6 +155,14 @@ export function useResume() {
       })),
     [],
   );
+  const reorderSkillGroups = useCallback(
+    (sourceId: string, targetId: string) =>
+      setData((prev) => ({
+        ...prev,
+        skills: reorderById(prev.skills, sourceId, targetId),
+      })),
+    [],
+  );
 
   // ── Projects ───────────────────────────────────────────────────────────────
   const addProject = useCallback(
@@ -160,6 +187,14 @@ export function useResume() {
       setData((prev) => ({
         ...prev,
         projects: prev.projects.filter((p) => p.id !== id),
+      })),
+    [],
+  );
+  const reorderProjects = useCallback(
+    (sourceId: string, targetId: string) =>
+      setData((prev) => ({
+        ...prev,
+        projects: reorderById(prev.projects, sourceId, targetId),
       })),
     [],
   );
@@ -193,6 +228,14 @@ export function useResume() {
       })),
     [],
   );
+  const reorderCertifications = useCallback(
+    (sourceId: string, targetId: string) =>
+      setData((prev) => ({
+        ...prev,
+        certifications: reorderById(prev.certifications, sourceId, targetId),
+      })),
+    [],
+  );
 
   // ── Languages ──────────────────────────────────────────────────────────────
   const addLanguage = useCallback(
@@ -220,6 +263,14 @@ export function useResume() {
       })),
     [],
   );
+  const reorderLanguages = useCallback(
+    (sourceId: string, targetId: string) =>
+      setData((prev) => ({
+        ...prev,
+        languages: reorderById(prev.languages, sourceId, targetId),
+      })),
+    [],
+  );
 
   // ── Awards ─────────────────────────────────────────────────────────────────
   const addAward = useCallback(
@@ -243,6 +294,14 @@ export function useResume() {
       setData((prev) => ({
         ...prev,
         awards: prev.awards.filter((a) => a.id !== id),
+      })),
+    [],
+  );
+  const reorderAwards = useCallback(
+    (sourceId: string, targetId: string) =>
+      setData((prev) => ({
+        ...prev,
+        awards: reorderById(prev.awards, sourceId, targetId),
       })),
     [],
   );
@@ -273,6 +332,14 @@ export function useResume() {
       })),
     [],
   );
+  const reorderVolunteer = useCallback(
+    (sourceId: string, targetId: string) =>
+      setData((prev) => ({
+        ...prev,
+        volunteer: reorderById(prev.volunteer, sourceId, targetId),
+      })),
+    [],
+  );
 
   const resetResume = useCallback(() => {
     clearStorage();
@@ -291,27 +358,35 @@ export function useResume() {
     addExperience,
     updateExperience,
     removeExperience,
+    reorderExperience,
     addEducation,
     updateEducation,
     removeEducation,
+    reorderEducation,
     addSkillGroup,
     updateSkillGroup,
     removeSkillGroup,
+    reorderSkillGroups,
     addProject,
     updateProject,
     removeProject,
+    reorderProjects,
     addCertification,
     updateCertification,
     removeCertification,
+    reorderCertifications,
     addLanguage,
     updateLanguage,
     removeLanguage,
+    reorderLanguages,
     addAward,
     updateAward,
     removeAward,
+    reorderAwards,
     addVolunteer,
     updateVolunteer,
     removeVolunteer,
+    reorderVolunteer,
     resetResume,
     loadResume,
   };
