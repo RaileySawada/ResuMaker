@@ -1124,7 +1124,7 @@ export default function App() {
         {/* Toast Notification */}
         {toast && (
           <div
-            className="fixed bottom-24 left-0 right-0 z-[300] px-4 lg:bottom-10 lg:left-1/2 lg:right-auto lg:w-auto lg:-translate-x-1/2 lg:px-0"
+            className="fixed bottom-24 left-0 right-0 z-[300] px-4 lg:bottom-10 lg:left-1/2 lg:right-auto lg:w-auto lg:-translate-x-1/2 lg:px-0 print:hidden"
             aria-live="polite"
           >
             <div
@@ -1162,7 +1162,7 @@ export default function App() {
 
         {/* Custom Reset Confirmation Modal */}
         {showResetConfirm && (
-          <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-zinc-950/40 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-zinc-950/40 backdrop-blur-md animate-in fade-in duration-300 print:hidden">
             <div className="w-full max-w-[380px] bg-white dark:bg-zinc-900 rounded-[2rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] border border-zinc-200 dark:border-zinc-800 p-8 text-center animate-in zoom-in-95 duration-300">
               <div className="w-16 h-16 rounded-3xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center text-red-500 mb-6 mx-auto shadow-inner">
                 <RefreshCwIcon size={28} />

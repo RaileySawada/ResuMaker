@@ -654,6 +654,7 @@ body,
 
   .editor-panel,
   .mobile-dock,
+  [aria-live="polite"],
   #preview-panel > :not(.resume-preview-scroll) {
     display: none !important;
   }
